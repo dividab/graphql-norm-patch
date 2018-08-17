@@ -24,12 +24,64 @@ npm install gql-cache-patch --save
 
 ## How to use
 
+The package has the following constructor functions for creating the patches:
+
+```ts
+export function createEntity<T>(
+  id: GraphQLEntityCache.EntityId,
+  newValue: T
+): CreateEntity;
+
+export function deleteEntity(id: GraphQLEntityCache.EntityId): DeleteEntity;
+
+export function updateField<T>(
+  id: string,
+  fieldName: Extract<keyof T, string>,
+  newValue: GraphQLEntityCache.EntityFieldValue | null
+): UpdateField;
+
+export function insertElement<T>(
+  id: GraphQLEntityCache.EntityId,
+  fieldName: Extract<keyof T, string>,
+  index: number,
+  newValue: GraphQLEntityCache.EntityFieldValue
+): InsertElement;
+
+export function removeElement<T>(
+  id: GraphQLEntityCache.EntityId,
+  fieldName: Extract<keyof T, string>,
+  index: number
+): RemoveElement;
+
+export function removeEntityElement<T>(
+  id: GraphQLEntityCache.EntityId,
+  fieldName: Extract<keyof T, string>,
+  entityId: GraphQLEntityCache.EntityId
+): RemoveEntityElement;
+```
+
+It also has a function to apply the patches to a cache and returns a tuple of the new cache object and stale entities map:
+
+```ts
+export function apply(
+  patches: ReadonlyArray<CachePatch.CachePatch>,
+  cache: GraphQLEntityCache.EntityCache,
+  staleEntities: GraphQLEntityCache.StaleEntities
+): [GraphQLEntityCache.EntityCache, GraphQLEntityCache.StaleEntities];
+```
+
 Here is a small example:
 
 ```js
-import {} from "gql-cache-patch";
+import { createEntity, apply } from "gql-cache-patch";
 
-// TODO!!
+const cache = {};
+const stale = {};
+const patch = createEntity("myid", { id: "myid", name: "foo" });
+const [patchedCache, patchedStale] = apply(testCase.patches, cache, stale);
+
+console.log(JSON.stringify(cache));
+/* { myid: { id: "myid", name: "foo" } } */
 ```
 
 [version-image]: https://img.shields.io/npm/v/gql-cache-patch.svg?style=flat

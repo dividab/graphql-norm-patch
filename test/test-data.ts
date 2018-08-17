@@ -1,4 +1,4 @@
-import { CachePatch } from "../src";
+import { CachePatch, createEntity, deleteEntity } from "../src";
 import { EntityCache } from "gql-cache";
 
 export interface OneTest {
@@ -12,9 +12,15 @@ export interface OneTest {
 
 export const testData: ReadonlyArray<OneTest> = [
   {
-    name: "Test1",
-    patches: [],
+    name: "CreateEntity",
+    patches: [createEntity("myid", { id: "myid", name: "foo" })],
     cacheBefore: {},
+    cacheAfter: { myid: { id: "myid", name: "foo" } }
+  },
+  {
+    name: "DeleteEntity",
+    patches: [deleteEntity("myid")],
+    cacheBefore: { myid: { id: "myid", name: "foo" } },
     cacheAfter: {}
   }
 ];

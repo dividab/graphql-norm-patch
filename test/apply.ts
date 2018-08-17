@@ -5,10 +5,9 @@ import { testData } from "./test-data";
 test("apply", t => {
   testData.forEach(testCase => {
     t.test(testCase.name, st => {
-      const cache = {};
       const [actualCache, actualStale] = apply(
         testCase.patches,
-        cache,
+        testCase.cacheBefore,
         testCase.staleBefore || {}
       );
       st.deepEqual(actualCache, testCase.cacheAfter);

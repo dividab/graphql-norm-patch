@@ -1,5 +1,5 @@
 {
-  "name": "@promaster/gql-cache-patch",
+  "name": "gql-cache-patch",
   "version": "0.1.0",
   "description": "Declarative patching for gql-cache",
   "main": "lib/index.js",

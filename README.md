@@ -6,7 +6,7 @@
 [![code style: prettier][prettier-image]][prettier-url]
 [![MIT license][license-image]][license-url]
 
-Declarative patching for gql-cache
+Declarative patching for [gql-cache](https://www.npmjs.com/package/gql-cache)
 
 ## Overview
 

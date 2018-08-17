@@ -62,6 +62,17 @@ export interface RemoveEntityElement {
   readonly entityId: GraphQLEntityCache.EntityId;
 }
 
+export function invalidateField<T>(
+  id: GraphQLEntityCache.EntityId,
+  fieldName: Extract<keyof T, string>
+): InvalidateField {
+  return {
+    type: "InvalidateField",
+    id,
+    fieldName
+  };
+}
+
 export function createEntity<T>(
   id: GraphQLEntityCache.EntityId,
   newValue: T

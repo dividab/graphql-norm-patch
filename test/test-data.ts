@@ -3,7 +3,10 @@ import {
   createEntity,
   deleteEntity,
   updateField,
-  insertElement
+  insertElement,
+  removeElement,
+  removeEntityElement,
+  invalidateField
 } from "../src";
 import { EntityCache, StaleEntities } from "gql-cache";
 
@@ -18,6 +21,10 @@ export interface OneTest {
 
 const testObj1 = { id: "myid", name: "foo" };
 const testObj2 = { id: "myid", names: ["foo", "bar"] };
+const testObj3 = {
+  id: "myid",
+  items: ["myitemid1", "myitemid2"]
+};
 
 export const testData: ReadonlyArray<OneTest> = [
   {
@@ -43,5 +50,38 @@ export const testData: ReadonlyArray<OneTest> = [
     patches: [insertElement<typeof testObj2>("myid", "names", 0, "baz")],
     cacheBefore: { myid: testObj2 },
     cacheAfter: { myid: { id: "myid", names: ["baz", "foo", "bar"] } }
+  },
+  {
+    name: "removeElement",
+    patches: [removeElement<typeof testObj2>("myid", "names", 0)],
+    cacheBefore: { myid: testObj2 },
+    cacheAfter: { myid: { id: "myid", names: ["bar"] } }
+  },
+  {
+    name: "removeEntityElement",
+    patches: [
+      removeEntityElement<typeof testObj3>("myid", "items", "myitemid1")
+    ],
+    cacheBefore: {
+      myid: testObj3,
+      myitemid1: { name: "first" },
+      myitemid2: { name: "second" }
+    },
+    cacheAfter: {
+      myid: {
+        id: "myid",
+        items: ["myitemid2"]
+      },
+      myitemid1: { name: "first" },
+      myitemid2: { name: "second" }
+    }
+  },
+  {
+    name: "invalidateField",
+    patches: [invalidateField<typeof testObj2>("myid", "names")],
+    cacheBefore: { myid: testObj2 },
+    cacheAfter: { myid: testObj2 },
+    staleBefore: {},
+    staleAfter: { myid: { names: true } }
   }
 ];

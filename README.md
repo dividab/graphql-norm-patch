@@ -84,6 +84,10 @@ console.log(JSON.stringify(cache));
 /* { myid: { id: "myid", name: "foo" } } */
 ```
 
+## Future work
+
+It would be interesting to investigate returning patches as an [extension](http://facebook.github.io/graphql/June2018/#sec-Response-Format) of the graphql response.
+
 [version-image]: https://img.shields.io/npm/v/gql-cache-patch.svg?style=flat
 [version-url]: https://www.npmjs.com/package/gql-cache-patch
 [travis-image]: https://travis-ci.org/dividab/gql-cache-patch.svg?branch=master&style=flat

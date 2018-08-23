@@ -90,6 +90,16 @@ A patch always specifies an ID for an entity in the cache. If the specified ID d
 
 Applying patches that specify a field name will only have effect if that field name already exits in the cache. If the field name does not exist on the specified entity in the cache, then applying the patch will silently do nothing. If a field exists but have value `null` and a `InsertElement` patch is applied to that field, a new array will automatically be created when applying the patch.
 
+## Type safety
+
+This package has built-in typescript types, and when using typescript some type saftey can be achieved by using types generated for the GraphQL schema. Types for the schema can be genereted using for example [graphql-code-generator](https://www.npmjs.com/package/graphql-code-generator) and then be used as this:
+
+```ts
+import { updateField } from "gql-cache-patch";
+
+const patch = updateField<GraphQLSchemaTypes.Foo>("myid", "myfield", "myvalue");
+```
+
 ## Future work
 
 It would be interesting to investigate returning patches as an [extension](http://facebook.github.io/graphql/June2018/#sec-Response-Format) of the graphql response.

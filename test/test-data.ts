@@ -103,6 +103,12 @@ export const testData: ReadonlyArray<OneTest> = [
     cacheAfter: { myid: testObj2 }
   },
   {
+    name: "updateField should update if the field is null",
+    patches: [updateField<typeof testObj1>("myid", "name", "bar")],
+    cacheBefore: { myid: { id: "myid", name: null } },
+    cacheAfter: { myid: { id: "myid", name: "bar" } }
+  },
+  {
     name: "insertElement should do nothing if entity is missing in cache",
     patches: [insertElement<typeof testObj2>("notmyid", "names", 0, "baz")],
     cacheBefore: { myid: testObj2 },
@@ -157,5 +163,11 @@ export const testData: ReadonlyArray<OneTest> = [
     cacheAfter: { myid: testObj1 },
     staleBefore: {},
     staleAfter: {}
+  },
+  {
+    name: "insertElement should create new array if the field is null",
+    patches: [insertElement<typeof testObj2>("myid", "names", 0, "baz")],
+    cacheBefore: { myid: { id: "myid", names: null } },
+    cacheAfter: { myid: { id: "myid", names: ["baz"] } }
   }
 ];

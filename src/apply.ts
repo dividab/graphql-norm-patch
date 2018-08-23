@@ -121,7 +121,10 @@ function applyInsertElement(
   if (entityAndFieldExists(cache, patch)) {
     // Shallow mutation of cache OK as we have a shallow copy
     // tslint:disable-next-line:no-any
-    const arrCopy = [...(cache[patch.id][patch.fieldName] as Array<any>)];
+    const arrCopy =
+      cache[patch.id][patch.fieldName] === null
+        ? []
+        : [...(cache[patch.id][patch.fieldName] as Array<any>)];
     arrCopy.splice(patch.index, 0, patch.newValue);
 
     cache[patch.id] = {
@@ -167,7 +170,12 @@ function entityAndFieldExists(
   cache: GraphQLEntityCache.EntityCache,
   patch: { readonly id: string; readonly fieldName: string }
 ): boolean {
-  return !!(cache[patch.id] && cache[patch.id][patch.fieldName]);
+  return !!(
+    cache[patch.id] &&
+    (cache[patch.id][patch.fieldName] ||
+      cache[patch.id][patch.fieldName] === null ||
+      cache[patch.id][patch.fieldName] === "")
+  );
 }
 
 function entityExists(

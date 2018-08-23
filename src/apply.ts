@@ -68,17 +68,18 @@ function applyInvalidateField(
   cache: GraphQLEntityCache.EntityCache,
   staleEntities: MutableStaleEntities
 ): void {
-  const entity = cache[patch.id];
-  const entityFieldKeys = Object.keys(entity).filter(
-    k => k.indexOf(patch.fieldName) !== -1
-  );
+  if (entityAndFieldExists(cache, patch)) {
+    const entityFieldKeys = Object.keys(cache[patch.id]).filter(
+      k => k.indexOf(patch.fieldName) !== -1
+    );
 
-  for (const fieldKey of entityFieldKeys) {
-    // Shallow mutation of stale entities OK as we have a shallow copy
-    staleEntities[patch.id] = {
-      ...staleEntities[patch.id],
-      [fieldKey]: true
-    };
+    for (const fieldKey of entityFieldKeys) {
+      // Shallow mutation of stale entities OK as we have a shallow copy
+      staleEntities[patch.id] = {
+        ...staleEntities[patch.id],
+        [fieldKey]: true
+      };
+    }
   }
 }
 
@@ -94,60 +95,92 @@ function applyDeleteEntity(
   patch: CachePatch.DeleteEntity,
   cache: MutableEntityCache
 ): void {
-  // Shallow mutation of cache OK as we have a shallow copy
-  delete cache[patch.id];
+  if (entityExists(cache, patch)) {
+    // Shallow mutation of cache OK as we have a shallow copy
+    delete cache[patch.id];
+  }
 }
 
 function applyUpdateField(
   patch: CachePatch.UpdateField,
   cache: MutableEntityCache
 ): void {
-  // Shallow mutation of cache OK as we have a shallow copy
-  cache[patch.id] = {
-    ...cache[patch.id],
-    [patch.fieldName]: patch.newValue
-  };
+  if (entityAndFieldExists(cache, patch)) {
+    // Shallow mutation of cache OK as we have a shallow copy
+    cache[patch.id] = {
+      ...cache[patch.id],
+      [patch.fieldName]: patch.newValue
+    };
+  }
 }
 
 function applyInsertElement(
   patch: CachePatch.InsertElement,
   cache: MutableEntityCache
 ): void {
-  // Shallow mutation of cache OK as we have a shallow copy
-  // tslint:disable-next-line:no-any
-  const arrCopy = [...(cache[patch.id][patch.fieldName] as Array<any>)];
-  arrCopy.splice(patch.index, 0, patch.newValue);
+  if (entityAndFieldExists(cache, patch)) {
+    // Shallow mutation of cache OK as we have a shallow copy
+    // tslint:disable-next-line:no-any
+    const arrCopy =
+      cache[patch.id][patch.fieldName] === null
+        ? []
+        : [...(cache[patch.id][patch.fieldName] as Array<any>)];
+    arrCopy.splice(patch.index, 0, patch.newValue);
 
-  cache[patch.id] = {
-    ...cache[patch.id],
-    [patch.fieldName]: arrCopy
-  };
+    cache[patch.id] = {
+      ...cache[patch.id],
+      [patch.fieldName]: arrCopy
+    };
+  }
 }
 
 function applyRemoveElement(
   patch: CachePatch.RemoveElement,
   cache: MutableEntityCache
 ): void {
-  // tslint:disable-next-line:no-any
-  const arrCopy = [...(cache[patch.id][patch.fieldName] as Array<any>)];
-  arrCopy.splice(patch.index, 1);
-  // Shallow mutation of cache OK as we have a shallow copy
-  cache[patch.id] = {
-    ...cache[patch.id],
-    [patch.fieldName]: arrCopy
-  };
+  if (entityAndFieldExists(cache, patch)) {
+    // tslint:disable-next-line:no-any
+    const arrCopy = [...(cache[patch.id][patch.fieldName] as Array<any>)];
+    arrCopy.splice(patch.index, 1);
+    // Shallow mutation of cache OK as we have a shallow copy
+    cache[patch.id] = {
+      ...cache[patch.id],
+      [patch.fieldName]: arrCopy
+    };
+  }
 }
 
 function applyRemoveEntityElement(
   patch: CachePatch.RemoveEntityElement,
   cache: MutableEntityCache
 ): void {
-  const arr = cache[patch.id][patch.fieldName] as ReadonlyArray<
-    GraphQLEntityCache.EntityId
-  >;
-  // Shallow mutation of cache OK as we have a shallow copy
-  cache[patch.id] = {
-    ...cache[patch.id],
-    [patch.fieldName]: arr.filter(x => x !== patch.entityId)
-  };
+  if (entityAndFieldExists(cache, patch)) {
+    const arr = cache[patch.id][patch.fieldName] as ReadonlyArray<
+      GraphQLEntityCache.EntityId
+    >;
+    // Shallow mutation of cache OK as we have a shallow copy
+    cache[patch.id] = {
+      ...cache[patch.id],
+      [patch.fieldName]: arr.filter(x => x !== patch.entityId)
+    };
+  }
+}
+
+function entityAndFieldExists(
+  cache: GraphQLEntityCache.EntityCache,
+  patch: { readonly id: string; readonly fieldName: string }
+): boolean {
+  return !!(
+    cache[patch.id] &&
+    (cache[patch.id][patch.fieldName] ||
+      cache[patch.id][patch.fieldName] === null ||
+      cache[patch.id][patch.fieldName] === "")
+  );
+}
+
+function entityExists(
+  cache: GraphQLEntityCache.EntityCache,
+  patch: { readonly id: string }
+): boolean {
+  return !!cache[patch.id];
 }

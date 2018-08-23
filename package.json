@@ -4,6 +4,15 @@
   "description": "Declarative patching for gql-cache",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dividab/gql-cache-patch.git"
+  },
+  "keywords": [
+    "graphql",
+    "cache",
+    "normalization"
+  ],
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
   "dependencies": {

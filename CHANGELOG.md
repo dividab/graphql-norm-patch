@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.2.0 - 2018-08-23
+
+### Added
+
+- Defaults to `Entity` for the type parameter in the constructor functions.
+
 ## 0.1.0 - 2018-08-17
 
 ### Added

@@ -10,27 +10,23 @@ export type CachePatch =
   | RemoveElement
   | RemoveEntityElement;
 
-// Makes a field stale in the cache
 export interface InvalidateField {
   readonly type: "InvalidateField";
   readonly id: string;
   readonly fieldName: string;
 }
 
-// Create a new entity
 export interface CreateEntity {
   readonly type: "CreateEntity";
   readonly id: GraphQLCache.EntityId;
   readonly newValue: GraphQLCache.Entity;
 }
 
-// Deletes an existing entity
 export interface DeleteEntity {
   readonly type: "DeleteEntity";
   readonly id: GraphQLCache.EntityId;
 }
 
-// Update a simple field value like a string or boolean
 export interface UpdateField {
   readonly type: "UpdateField";
   readonly id: string;
@@ -38,7 +34,6 @@ export interface UpdateField {
   readonly newValue: GraphQLCache.EntityFieldValue | null;
 }
 
-// Inserts an element into an array-field in an entity
 export interface InsertElement {
   readonly type: "InsertElement";
   readonly id: GraphQLCache.EntityId;
@@ -47,7 +42,6 @@ export interface InsertElement {
   readonly newValue: GraphQLCache.EntityFieldValue;
 }
 
-// Remove an element from an array-field in an entity
 export interface RemoveElement {
   readonly type: "RemoveElement";
   readonly id: GraphQLCache.EntityId;
@@ -62,6 +56,9 @@ export interface RemoveEntityElement {
   readonly entityId: GraphQLCache.EntityId;
 }
 
+/**
+ *  Makes a field stale in the cache
+ */
 export function invalidateField<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>
@@ -73,6 +70,9 @@ export function invalidateField<T = GraphQLCache.Entity>(
   };
 }
 
+/**
+ * Create a new entity
+ */
 export function createEntity<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   newValue: T
@@ -81,10 +81,16 @@ export function createEntity<T = GraphQLCache.Entity>(
   return { type: "CreateEntity", id, newValue: newValue as any };
 }
 
+/**
+ * Deletes an existing entity
+ */
 export function deleteEntity(id: GraphQLCache.EntityId): DeleteEntity {
   return { type: "DeleteEntity", id };
 }
 
+/**
+ * Update a simple field value like a string or boolean
+ */
 export function updateField<T = GraphQLCache.Entity>(
   id: string,
   fieldName: Extract<keyof T, string>,
@@ -93,6 +99,9 @@ export function updateField<T = GraphQLCache.Entity>(
   return { type: "UpdateField", id, fieldName, newValue };
 }
 
+/**
+ * Inserts an element into an array-field in an entity
+ */
 export function insertElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
@@ -102,6 +111,9 @@ export function insertElement<T = GraphQLCache.Entity>(
   return { type: "InsertElement", id, fieldName, index, newValue };
 }
 
+/**
+ * Remove an element from an array-field in an entity
+ */
 export function removeElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
@@ -110,6 +122,9 @@ export function removeElement<T = GraphQLCache.Entity>(
   return { type: "RemoveElement", id, fieldName, index };
 }
 
+/**
+ * Remove all occurances of elements with specified ID from an array-field in an entity
+ */
 export function removeEntityElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,

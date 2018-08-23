@@ -84,6 +84,12 @@ console.log(JSON.stringify(cache));
 /* { myid: { id: "myid", name: "foo" } } */
 ```
 
+## How patches are applied to the cache
+
+A patch always specifies an ID for an entity in the cache. If the specified ID does not exist in cache, applying the patch will silently do nothing. The exception to this rule is the `CreateEntity` patch which will create the entity in the cache.
+
+Applying patches that specify a field name will only have effect if that field name already exits in the cache. If the field name does not exist on the speciriedentity in the cache, then applying the patch will silently do nothing. If a field exists but have value `null` and a `InsertElement` patch is applied to that field, a new array will automatically be created when applying the patch.
+
 ## Future work
 
 It would be interesting to investigate returning patches as an [extension](http://facebook.github.io/graphql/June2018/#sec-Response-Format) of the graphql response.

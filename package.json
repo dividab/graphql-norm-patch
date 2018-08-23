@@ -1,6 +1,6 @@
 {
   "name": "gql-cache-patch",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Declarative patching for gql-cache",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

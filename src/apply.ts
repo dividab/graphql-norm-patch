@@ -69,6 +69,10 @@ function applyInvalidateField(
   staleEntities: MutableStaleEntities
 ): void {
   if (entityAndFieldExists(cache, patch)) {
+    // We want to invalidate all fields that start with the specified
+    // field name in order to invlidate fields with arguments
+    // For example the fields "products" and "products(ids: [1, 2])" should
+    // both be invalidated if the field name "products" is specified
     const entityFieldKeys = Object.keys(cache[patch.id]).filter(
       k => k.indexOf(patch.fieldName) !== -1
     );

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.4.0 - 2018-08-24
+
+### Added
+
+- Upgraded dependency to gql-cache.
+- Fix check for non-existend field.
+
 ## 0.3.0 - 2018-08-23
 
 ### Added

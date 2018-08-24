@@ -16,7 +16,7 @@
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
   "dependencies": {
-    "gql-cache": "^0.3.0"
+    "gql-cache": "^0.4.0"
   },
   "devDependencies": {
     "@types/tape": "^4.2.32",

@@ -824,9 +824,9 @@ globals@^11.1.0:
   version "11.7.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.7.0.tgz#a583faa43055b1aca771914bf68258e2fc125673"
 
-gql-cache@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/gql-cache/-/gql-cache-0.3.0.tgz#f6881d5d53dda7305f42f822382d903b1ff7788e"
+gql-cache@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/gql-cache/-/gql-cache-0.4.0.tgz#4f39b1f68fe2ff2b80d0e0ef66c714af7c626690"
   dependencies:
     "@types/graphql" "^0.13.0"
     graphql "^0.13.0"

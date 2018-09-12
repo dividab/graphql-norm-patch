@@ -12,6 +12,7 @@ import { EntityCache, StaleEntities } from "gql-cache";
 
 export interface OneTest {
   readonly name: string;
+  readonly only?: true;
   readonly patches: ReadonlyArray<CachePatch>;
   readonly cacheBefore: EntityCache;
   readonly cacheAfter: EntityCache;
@@ -93,8 +94,9 @@ export const testData: ReadonlyArray<OneTest> = [
     staleBefore: {},
     staleAfter: { myid: { ["names(id:1)"]: true } }
   },
-  /*   {
+  {
     name: "invalidateFieldRecursive",
+    only: true,
     patches: [invalidateField<any>("myid", "news")],
     cacheBefore: {
       myid: { news: ["NewsItemType:1"] },
@@ -109,7 +111,7 @@ export const testData: ReadonlyArray<OneTest> = [
       myid: { news: true },
       ["NewsItemType:1"]: { id: true, header: true }
     }
-  }, */
+  },
   {
     name: "deleteEntity should do nothing if entity is missing in cache",
     patches: [deleteEntity("notmyid")],

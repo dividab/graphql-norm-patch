@@ -77,24 +77,80 @@ function applyInvalidateField(
       k => k.indexOf(patch.fieldName) !== -1
     );
 
+    if (entityFieldKeys.length === 0) {
+      return;
+    }
+
     for (const fieldKey of entityFieldKeys) {
-      // Shallow mutation of stale entities OK as we have a shallow copy
       staleEntities[patch.id] = {
         ...staleEntities[patch.id],
         [fieldKey]: true
       };
+      // Shallow mutation of stale entities OK as we have a shallow copy
+      invalidateRecursive(cache, staleEntities, cache[patch.id][fieldKey]);
     }
   }
 }
 
-/* function invalidateRecursive(
+function hasIdFields(
+  cache: GraphQLEntityCache.EntityCache,
+  field: GraphQLEntityCache.EntityFieldValue
+): boolean {
+  if (Array.isArray(field) && field.some(x => !!cache[x])) {
+    return true;
+  }
+
+  return false;
+}
+
+export declare type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+
+function invalidateRecursive(
   cache: GraphQLEntityCache.EntityCache,
   staleEntities: MutableStaleEntities,
-  startId: string
+  startingEntity: GraphQLEntityCache.EntityFieldValue | null
 ): void {
+  if (
+    typeof startingEntity === "number" ||
+    typeof startingEntity === "boolean" ||
+    startingEntity === "undefined" ||
+    startingEntity === "null"
+  ) {
+    return;
+  }
+  const stack: Array<string> = [];
 
-  for(const asdf of )
-} */
+  if (typeof startingEntity === "string" && cache[startingEntity]) {
+    stack.push(startingEntity);
+  } else if (
+    Array.isArray(startingEntity) &&
+    hasIdFields(cache, startingEntity)
+  ) {
+    stack.push(...startingEntity);
+  }
+
+  while (stack.length > 0) {
+    const key = stack.shift()!;
+    const entity = cache[key];
+    if (entity === undefined) {
+      console.log(entity, key);
+      continue;
+    }
+    const entityFieldKeys = Object.keys(entity);
+    const newStaleEntity: Mutable<GraphQLEntityCache.StaleEntity> = {
+      ...staleEntities[key]
+    };
+
+    for (const entityFieldKey of entityFieldKeys) {
+      const field = entity[entityFieldKey];
+      if (Array.isArray(field) && hasIdFields(cache, field)) {
+        stack.push(...field);
+      }
+      newStaleEntity[entityFieldKey] = true;
+    }
+    staleEntities[key] = newStaleEntity;
+  }
+}
 
 function applyCreateEntity(
   patch: CachePatch.CreateEntity,

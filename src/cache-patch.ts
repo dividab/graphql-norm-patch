@@ -2,6 +2,7 @@ import * as GraphQLCache from "gql-cache";
 
 // A definition of an operation that modifies an entity
 export type CachePatch =
+  | InvalidateEntity
   | InvalidateField
   | CreateEntity
   | DeleteEntity
@@ -9,6 +10,11 @@ export type CachePatch =
   | InsertElement
   | RemoveElement
   | RemoveEntityElement;
+
+export interface InvalidateEntity {
+  readonly type: "InvalidateEntity";
+  readonly id: string;
+}
 
 export interface InvalidateField {
   readonly type: "InvalidateField";
@@ -54,6 +60,16 @@ export interface RemoveEntityElement {
   readonly id: GraphQLCache.EntityId;
   readonly fieldName: string;
   readonly entityId: GraphQLCache.EntityId;
+}
+
+/**
+ *  Makes an entity stale in the cache
+ */
+export function invalidateEntity(id: GraphQLCache.EntityId): InvalidateEntity {
+  return {
+    type: "InvalidateEntity",
+    id
+  };
 }
 
 /**

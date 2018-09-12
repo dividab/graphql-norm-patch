@@ -6,7 +6,8 @@ import {
   insertElement,
   removeElement,
   removeEntityElement,
-  invalidateField
+  invalidateField,
+  invalidateEntity
 } from "../src";
 import { EntityCache, StaleEntities } from "gql-cache";
 
@@ -77,6 +78,14 @@ export const testData: ReadonlyArray<OneTest> = [
       myitemid1: { name: "first" },
       myitemid2: { name: "second" }
     }
+  },
+  {
+    name: "invalidateEntity",
+    patches: [invalidateEntity("myid")],
+    cacheBefore: { myid: testObj2 },
+    cacheAfter: { myid: testObj2 },
+    staleBefore: {},
+    staleAfter: { myid: { id: true, names: true } }
   },
   {
     name: "invalidateField",

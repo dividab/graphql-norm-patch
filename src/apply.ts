@@ -25,6 +25,10 @@ export function apply(
   let staleEntitiesCopy: MutableStaleEntities = { ...staleEntities };
   for (const patch of patches) {
     switch (patch.type) {
+      case "InvalidateEntity": {
+        applyInvalidateEntity(patch, cacheCopy, staleEntitiesCopy);
+        break;
+      }
       case "InvalidateField": {
         applyInvalidateField(patch, cacheCopy, staleEntitiesCopy);
         break;
@@ -61,6 +65,20 @@ export function apply(
   }
 
   return [cacheCopy, staleEntitiesCopy];
+}
+
+function applyInvalidateEntity(
+  patch: CachePatch.InvalidateEntity,
+  cache: GraphQLEntityCache.EntityCache,
+  staleEntities: MutableStaleEntities
+): void {
+  const entity = cache[patch.id];
+  if (entity !== undefined) {
+    for (const entityKey of Object.keys(entity)) {
+      console.log(entityKey);
+      invalidateRecursive(cache, staleEntities, entity[entityKey]);
+    }
+  }
 }
 
 function applyInvalidateField(
@@ -118,6 +136,7 @@ function invalidateRecursive(
   ) {
     return;
   }
+
   const stack: Array<string> = [];
 
   if (typeof startingEntity === "string" && cache[startingEntity]) {
@@ -143,8 +162,12 @@ function invalidateRecursive(
     for (const entityFieldKey of entityFieldKeys) {
       const field = entity[entityFieldKey];
       if (Array.isArray(field) && hasIdFields(cache, field)) {
-        stack.push(...field);
-      } else if (typeof field === "string" && cache[field]) {
+        stack.push(...field.filter(f => !staleEntities[f]));
+      } else if (
+        typeof field === "string" &&
+        cache[field] &&
+        !staleEntities[field]
+      ) {
         stack.push(field);
       }
       newStaleEntity[entityFieldKey] = true;

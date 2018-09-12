@@ -96,20 +96,28 @@ export const testData: ReadonlyArray<OneTest> = [
   },
   {
     name: "invalidateFieldRecursive",
-    only: true,
-    patches: [invalidateField<any>("myid", "news")],
+    patches: [
+      invalidateField<any>("myid", "prop")
+      // invalidateField<any>("myid", "prop2")
+    ],
     cacheBefore: {
-      myid: { news: ["NewsItemType:1"] },
-      ["NewsItemType:1"]: { id: 1, header: "olle" }
+      myid: { prop: "obj:1" },
+      ["obj:1"]: { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
+      ["NewsItemType:1"]: { id: 1, header: "olle" },
+      ["NewsItemType:2"]: { id: 2, header: "olle2" }
     },
     cacheAfter: {
-      myid: { news: ["NewsItemType:1"] },
-      ["NewsItemType:1"]: { id: 1, header: "olle" }
+      myid: { prop: "obj:1" },
+      ["obj:1"]: { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
+      ["NewsItemType:1"]: { id: 1, header: "olle" },
+      ["NewsItemType:2"]: { id: 2, header: "olle2" }
     },
     staleBefore: {},
     staleAfter: {
-      myid: { news: true },
-      ["NewsItemType:1"]: { id: true, header: true }
+      myid: { prop: true },
+      ["obj:1"]: { id: true, news: true },
+      ["NewsItemType:1"]: { id: true, header: true },
+      ["NewsItemType:2"]: { id: true, header: true }
     }
   },
   {

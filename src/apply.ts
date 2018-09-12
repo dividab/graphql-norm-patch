@@ -133,7 +133,6 @@ function invalidateRecursive(
     const key = stack.shift()!;
     const entity = cache[key];
     if (entity === undefined) {
-      console.log(entity, key);
       continue;
     }
     const entityFieldKeys = Object.keys(entity);
@@ -145,6 +144,8 @@ function invalidateRecursive(
       const field = entity[entityFieldKey];
       if (Array.isArray(field) && hasIdFields(cache, field)) {
         stack.push(...field);
+      } else if (typeof field === "string" && cache[field]) {
+        stack.push(field);
       }
       newStaleEntity[entityFieldKey] = true;
     }

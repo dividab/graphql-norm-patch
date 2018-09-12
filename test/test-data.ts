@@ -25,6 +25,7 @@ const testObj3 = {
   id: "myid",
   items: ["myitemid1", "myitemid2"]
 };
+const testObj4 = { id: "myid", ["names(id:1)"]: ["foo", "bar"] };
 
 export const testData: ReadonlyArray<OneTest> = [
   {
@@ -84,6 +85,31 @@ export const testData: ReadonlyArray<OneTest> = [
     staleBefore: {},
     staleAfter: { myid: { names: true } }
   },
+  {
+    name: "invalidateFieldWithParams",
+    patches: [invalidateField<any>("myid", "names")],
+    cacheBefore: { myid: testObj4 },
+    cacheAfter: { myid: testObj4 },
+    staleBefore: {},
+    staleAfter: { myid: { ["names(id:1)"]: true } }
+  },
+  /*   {
+    name: "invalidateFieldRecursive",
+    patches: [invalidateField<any>("myid", "news")],
+    cacheBefore: {
+      myid: { news: ["NewsItemType:1"] },
+      ["NewsItemType:1"]: { id: 1, header: "olle" }
+    },
+    cacheAfter: {
+      myid: { news: ["NewsItemType:1"] },
+      ["NewsItemType:1"]: { id: 1, header: "olle" }
+    },
+    staleBefore: {},
+    staleAfter: {
+      myid: { news: true },
+      ["NewsItemType:1"]: { id: true, header: true }
+    }
+  }, */
   {
     name: "deleteEntity should do nothing if entity is missing in cache",
     patches: [deleteEntity("notmyid")],

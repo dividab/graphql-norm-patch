@@ -68,7 +68,7 @@ function applyInvalidateField(
   cache: GraphQLEntityCache.EntityCache,
   staleEntities: MutableStaleEntities
 ): void {
-  if (entityAndFieldExists(cache, patch)) {
+  if (cache[patch.id] !== undefined) {
     // We want to invalidate all fields that start with the specified
     // field name in order to invlidate fields with arguments
     // For example the fields "products" and "products(ids: [1, 2])" should
@@ -86,6 +86,15 @@ function applyInvalidateField(
     }
   }
 }
+
+/* function invalidateRecursive(
+  cache: GraphQLEntityCache.EntityCache,
+  staleEntities: MutableStaleEntities,
+  startId: string
+): void {
+
+  for(const asdf of )
+} */
 
 function applyCreateEntity(
   patch: CachePatch.CreateEntity,

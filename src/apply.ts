@@ -110,10 +110,10 @@ function applyInvalidateField(
   }
 }
 
-function hasIdFields(
+function isArrayOfEntityIds(
   cache: GraphQLEntityCache.EntityCache,
-  field: GraphQLEntityCache.EntityFieldValue
-): boolean {
+  field: GraphQLEntityCache.EntityFieldValue | null
+): field is ReadonlyArray<string> {
   if (Array.isArray(field) && field.some(x => !!cache[x])) {
     return true;
   }
@@ -141,38 +141,36 @@ function invalidateRecursive(
 
   if (typeof startingEntity === "string" && cache[startingEntity]) {
     stack.push(startingEntity);
-  } else if (
-    Array.isArray(startingEntity) &&
-    hasIdFields(cache, startingEntity)
-  ) {
+  } else if (isArrayOfEntityIds(cache, startingEntity)) {
     stack.push(...startingEntity);
   }
 
   while (stack.length > 0) {
-    const key = stack.shift()!;
-    const entity = cache[key];
+    const entityId = stack.shift()!;
+    const entity = cache[entityId];
     if (entity === undefined) {
       continue;
     }
     const entityFieldKeys = Object.keys(entity);
     const newStaleEntity: Mutable<GraphQLEntityCache.StaleEntity> = {
-      ...staleEntities[key]
+      ...staleEntities[entityId]
     };
 
     for (const entityFieldKey of entityFieldKeys) {
-      const field = entity[entityFieldKey];
-      if (Array.isArray(field) && hasIdFields(cache, field)) {
-        stack.push(...field.filter(f => !staleEntities[f]));
+      const entityField = entity[entityFieldKey];
+      if (isArrayOfEntityIds(cache, entityField)) {
+        stack.push(...entityField.filter(id => !staleEntities[id]));
       } else if (
-        typeof field === "string" &&
-        cache[field] &&
-        !staleEntities[field]
+        typeof entityField === "string" &&
+        cache[entityField] &&
+        !staleEntities[entityField]
       ) {
-        stack.push(field);
+        stack.push(entityField);
       }
       newStaleEntity[entityFieldKey] = true;
     }
-    staleEntities[key] = newStaleEntity;
+
+    staleEntities[entityId] = newStaleEntity;
   }
 }
 

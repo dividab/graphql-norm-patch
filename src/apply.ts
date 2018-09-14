@@ -110,17 +110,6 @@ function applyInvalidateField(
   }
 }
 
-function isArrayOfEntityIds(
-  cache: GraphQLEntityCache.EntityCache,
-  field: GraphQLEntityCache.EntityFieldValue | null
-): field is ReadonlyArray<string> {
-  if (Array.isArray(field) && field.some(x => !!cache[x])) {
-    return true;
-  }
-
-  return false;
-}
-
 export declare type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 
 function invalidateRecursive(
@@ -172,6 +161,17 @@ function invalidateRecursive(
 
     staleEntities[entityId] = newStaleEntity;
   }
+}
+
+function isArrayOfEntityIds(
+  cache: GraphQLEntityCache.EntityCache,
+  field: GraphQLEntityCache.EntityFieldValue | null
+): field is ReadonlyArray<GraphQLEntityCache.EntityId> {
+  if (Array.isArray(field) && field.some(x => !!cache[x])) {
+    return true;
+  }
+
+  return false;
 }
 
 function applyCreateEntity(

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.8.0 - 2018-09-27
+
+- Upgrade gql-cache dependency to version 0.8.0
+
 ## 0.7.0 - 2018-09-14
 
 - Upgrade gql-cache dependency to version 0.7.0

@@ -824,9 +824,9 @@ globals@^11.1.0:
   version "11.7.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.7.0.tgz#a583faa43055b1aca771914bf68258e2fc125673"
 
-gql-cache@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/gql-cache/-/gql-cache-0.8.0.tgz#9ab11ff486ef1614e7f4fb5eca7b50a287eea5bb"
+gql-cache@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/gql-cache/-/gql-cache-0.9.0.tgz#2db7aa0cf549a34fc3b77d28d7dd7139f979f6e8"
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "4.1.11"

@@ -106,8 +106,8 @@ It would be interesting to investigate returning patches as an [extension](http:
 
 [version-image]: https://img.shields.io/npm/v/gql-cache-patch.svg?style=flat
 [version-url]: https://www.npmjs.com/package/gql-cache-patch
-[travis-image]: https://travis-ci.org/dividab/gql-cache-patch.svg?branch=master&style=flat
-[travis-url]: https://travis-ci.org/dividab/gql-cache-patch
+[travis-image]: https://travis-ci.com/dividab/gql-cache-patch.svg?branch=master&style=flat
+[travis-url]: https://travis-ci.com/dividab/gql-cache-patch
 [coveralls-image]: https://coveralls.io/repos/github/dividab/gql-cache-patch/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/dividab/gql-cache-patch?branch=master
 [license-image]: https://img.shields.io/github/license/dividab/gql-cache-patch.svg?style=flat

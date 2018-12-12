@@ -2,7 +2,7 @@
 
 [![npm version][version-image]][version-url]
 [![travis build][travis-image]][travis-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
+[![Coverage Status][codecov-image]][codecov-url]
 [![code style: prettier][prettier-image]][prettier-url]
 [![MIT license][license-image]][license-url]
 
@@ -108,8 +108,8 @@ It would be interesting to investigate returning patches as an [extension](http:
 [version-url]: https://www.npmjs.com/package/gql-cache-patch
 [travis-image]: https://travis-ci.com/dividab/gql-cache-patch.svg?branch=master&style=flat
 [travis-url]: https://travis-ci.com/dividab/gql-cache-patch
-[coveralls-image]: https://coveralls.io/repos/github/dividab/gql-cache-patch/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/dividab/gql-cache-patch?branch=master
+[codecov-image]: https://codecov.io/gh/dividab/gql-cache-patch/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/dividab/gql-cache-patch
 [license-image]: https://img.shields.io/github/license/dividab/gql-cache-patch.svg?style=flat
 [license-url]: https://opensource.org/licenses/MIT
 [prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat

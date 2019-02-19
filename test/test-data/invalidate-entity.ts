@@ -44,13 +44,13 @@ export const invalidateEntityTestData: ReadonlyArray<OneTest> = [
     name: "invalidateEntity recursive=true with deep data",
     patches: [invalidateEntity("myid", true)],
     cacheBefore: {
-      myid: { prop: "obj:1" },
+      myid: { id: "myid", prop: "obj:1" },
       "obj:1": { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
       "NewsItemType:1": { id: 1, header: "olle" },
       "NewsItemType:2": { id: 2, header: "olle2" }
     },
     cacheAfter: {
-      myid: { prop: "obj:1" },
+      myid: { id: "myid", prop: "obj:1" },
       "obj:1": { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
       "NewsItemType:1": { id: 1, header: "olle" },
       "NewsItemType:2": { id: 2, header: "olle2" }

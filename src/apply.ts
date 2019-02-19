@@ -74,9 +74,14 @@ function applyInvalidateEntity(
 ): void {
   const entity = cache[patch.id];
   if (entity !== undefined) {
+    const newStaleEntity: Mutable<GraphQLEntityCache.StaleEntity> = {
+      ...staleEntities[patch.id]
+    };
     for (const entityKey of Object.keys(entity)) {
+      newStaleEntity[entityKey] = true;
       invalidateRecursive(cache, staleEntities, entity[entityKey]);
     }
+    staleEntities[patch.id] = newStaleEntity;
   }
 }
 

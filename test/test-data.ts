@@ -88,7 +88,7 @@ export const testData: ReadonlyArray<OneTest> = [
     staleAfter: { obj2: { id: true, names: true } }
   },
   {
-    name: "invalidateEntityRecursive",
+    name: "invalidateEntityRecursive with shallow data",
     patches: [invalidateEntity("obj2", true)],
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
@@ -96,15 +96,7 @@ export const testData: ReadonlyArray<OneTest> = [
     staleAfter: { obj2: { id: true, names: true } }
   },
   {
-    name: "invalidateFieldRecursive",
-    patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
-    cacheBefore: { obj2: testObj2 },
-    cacheAfter: { obj2: testObj2 },
-    staleBefore: {},
-    staleAfter: { obj2: { names: true } }
-  },
-  {
-    name: "invalidateFieldShallow",
+    name: "invalidateFieldRecursive with shallow data",
     patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
@@ -120,7 +112,27 @@ export const testData: ReadonlyArray<OneTest> = [
     staleAfter: { obj4: { ["names(id:1)"]: true } }
   },
   {
-    name: "invalidateFieldRecursive",
+    name: "invalidateFieldShallow with deep data",
+    patches: [invalidateField<any>("myid", "prop", false)],
+    cacheBefore: {
+      myid: { prop: "obj:1" },
+      ["obj:1"]: { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
+      ["NewsItemType:1"]: { id: 1, header: "olle" },
+      ["NewsItemType:2"]: { id: 2, header: "olle2" }
+    },
+    cacheAfter: {
+      myid: { prop: "obj:1" },
+      ["obj:1"]: { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
+      ["NewsItemType:1"]: { id: 1, header: "olle" },
+      ["NewsItemType:2"]: { id: 2, header: "olle2" }
+    },
+    staleBefore: {},
+    staleAfter: {
+      myid: { prop: true }
+    }
+  },
+  {
+    name: "invalidateFieldRecursive with deep data",
     patches: [invalidateField<any>("myid", "prop", true)],
     cacheBefore: {
       myid: { prop: "obj:1" },

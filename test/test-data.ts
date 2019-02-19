@@ -1,6 +1,4 @@
 import {
-  CachePatch,
-  createEntity,
   deleteEntity,
   updateField,
   insertElement,
@@ -9,17 +7,14 @@ import {
   invalidateField,
   invalidateEntity
 } from "../src";
-import { EntityCache, StaleEntities } from "gql-cache";
+import { createEntityTestData } from "./test-data/create-entity";
+import { deleteEntityTestData } from "./test-data/delete-entity";
+import { updateFieldTestData } from "./test-data/update-field";
+import { insertElementTestData } from "./test-data/insert-element";
+import { removeElementTestData } from "./test-data/remove-element";
+import { removeEntityElementTestData } from "./test-data/remove-entity-element";
 
-export interface OneTest {
-  readonly name: string;
-  readonly only?: true;
-  readonly patches: ReadonlyArray<CachePatch>;
-  readonly cacheBefore: EntityCache;
-  readonly cacheAfter: EntityCache;
-  readonly staleBefore?: StaleEntities;
-  readonly staleAfter?: StaleEntities;
-}
+import { OneTest } from "./test-data/one-test";
 
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
@@ -30,57 +25,14 @@ const testObj3 = {
 const testObj4 = { id: "obj4", ["names(id:1)"]: ["foo", "bar"] };
 
 export const testData: ReadonlyArray<OneTest> = [
+  ...createEntityTestData,
+  ...deleteEntityTestData,
+  ...updateFieldTestData,
+  ...insertElementTestData,
+  ...removeElementTestData,
+  ...removeEntityElementTestData,
   {
-    name: "createEntity",
-    patches: [createEntity("obj1", testObj1)],
-    cacheBefore: {},
-    cacheAfter: { obj1: testObj1 }
-  },
-  {
-    name: "deleteEntity",
-    patches: [deleteEntity("obj1")],
-    cacheBefore: { obj1: testObj1 },
-    cacheAfter: {}
-  },
-  {
-    name: "updateField",
-    patches: [updateField<typeof testObj1>("obj1", "name", "bar")],
-    cacheBefore: { obj1: testObj1 },
-    cacheAfter: { obj1: { id: "obj1", name: "bar" } }
-  },
-  {
-    name: "insertElement",
-    patches: [insertElement<typeof testObj2>("obj2", "names", 0, "baz")],
-    cacheBefore: { obj2: testObj2 },
-    cacheAfter: { obj2: { id: "obj2", names: ["baz", "foo", "bar"] } }
-  },
-  {
-    name: "removeElement",
-    patches: [removeElement<typeof testObj2>("obj2", "names", 0)],
-    cacheBefore: { obj2: testObj2 },
-    cacheAfter: { obj2: { id: "obj2", names: ["bar"] } }
-  },
-  {
-    name: "removeEntityElement",
-    patches: [
-      removeEntityElement<typeof testObj3>("obj3", "items", "myitemid1")
-    ],
-    cacheBefore: {
-      obj3: testObj3,
-      myitemid1: { name: "first" },
-      myitemid2: { name: "second" }
-    },
-    cacheAfter: {
-      obj3: {
-        id: "obj3",
-        items: ["myitemid2"]
-      },
-      myitemid1: { name: "first" },
-      myitemid2: { name: "second" }
-    }
-  },
-  {
-    name: "invalidateEntityShallow",
+    name: "invalidateEntityShallow with shallow data",
     patches: [invalidateEntity("obj2", false)],
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },

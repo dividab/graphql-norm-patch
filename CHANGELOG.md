@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.10.0] - 2019-02-19
+
 ### Changed
 
 - Make recursive optional for `InvalidateField` and `InvalidateEntity`. See PR [#5](https://github.com/dividab/gql-cache-patch/pull/5).
@@ -66,7 +68,8 @@ Add invalidate recursive and invalidate entity functionality
 
 - Initial version.
 
-[unreleased]: https://github.com/dividab/tsconfig-paths/compare/0.9.0...master
+[unreleased]: https://github.com/dividab/tsconfig-paths/compare/0.10.0...master
+[0.10.0]: https://github.com/dividab/tsconfig-paths/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/dividab/tsconfig-paths/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/dividab/tsconfig-paths/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/dividab/tsconfig-paths/compare/0.6.0...0.7.0

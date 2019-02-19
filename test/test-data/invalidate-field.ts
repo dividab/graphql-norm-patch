@@ -47,22 +47,22 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     patches: [invalidateField<any>("myid", "prop", true)],
     cacheBefore: {
       myid: { prop: "obj:1" },
-      ["obj:1"]: { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
-      ["NewsItemType:1"]: { id: 1, header: "olle" },
-      ["NewsItemType:2"]: { id: 2, header: "olle2" }
+      "obj:1": { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
+      "NewsItemType:1": { id: 1, header: "olle" },
+      "NewsItemType:2": { id: 2, header: "olle2" }
     },
     cacheAfter: {
       myid: { prop: "obj:1" },
-      ["obj:1"]: { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
-      ["NewsItemType:1"]: { id: 1, header: "olle" },
-      ["NewsItemType:2"]: { id: 2, header: "olle2" }
+      "obj:1": { id: "1", news: ["NewsItemType:1", "NewsItemType:2"] },
+      "NewsItemType:1": { id: 1, header: "olle" },
+      "NewsItemType:2": { id: 2, header: "olle2" }
     },
     staleBefore: {},
     staleAfter: {
       myid: { prop: true },
-      ["obj:1"]: { id: true, news: true },
-      ["NewsItemType:1"]: { id: true, header: true },
-      ["NewsItemType:2"]: { id: true, header: true }
+      "obj:1": { id: true, news: true },
+      "NewsItemType:1": { id: true, header: true },
+      "NewsItemType:2": { id: true, header: true }
     }
   },
   {

@@ -7,7 +7,7 @@ const testObj4 = { id: "obj4", ["names(id:1)"]: ["foo", "bar"] };
 
 export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
   {
-    name: "invalidateFieldRecursive with shallow data",
+    name: "invalidateField recursive=true with shallow data",
     patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
@@ -15,7 +15,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     staleAfter: { obj2: { names: true } }
   },
   {
-    name: "invalidateFieldWithParamsRecursive",
+    name: "invalidateField WithParams recursive=true",
     patches: [invalidateField<any>("obj4", "names", true)],
     cacheBefore: { obj4: testObj4 },
     cacheAfter: { obj4: testObj4 },
@@ -23,7 +23,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     staleAfter: { obj4: { ["names(id:1)"]: true } }
   },
   {
-    name: "invalidateFieldShallow with deep data",
+    name: "invalidateField recursive=false with deep data",
     patches: [invalidateField<any>("myid", "prop", false)],
     cacheBefore: {
       myid: { prop: "obj:1" },
@@ -43,7 +43,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     }
   },
   {
-    name: "invalidateFieldRecursive with deep data",
+    name: "invalidateField recursive=true with deep data",
     patches: [invalidateField<any>("myid", "prop", true)],
     cacheBefore: {
       myid: { prop: "obj:1" },
@@ -67,7 +67,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
   },
   {
     name:
-      "invalidateFieldRecursive should do nothing if entity is missing in cache",
+      "invalidateField recursive=true should do nothing if entity is missing in cache",
     patches: [invalidateField<typeof testObj2>("notobj2", "names", true)],
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
@@ -76,7 +76,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
   },
   {
     name:
-      "invalidateFieldRecursive should do nothing if field is missing in cache",
+      "invalidateField recursive=true should do nothing if field is missing in cache",
     patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
     cacheBefore: { obj2: testObj1 },
     cacheAfter: { obj2: testObj1 },

@@ -9,5 +9,11 @@ export const deleteEntityTestData: ReadonlyArray<OneTest> = [
     patches: [deleteEntity("obj1")],
     cacheBefore: { obj1: testObj1 },
     cacheAfter: {}
+  },
+  {
+    name: "deleteEntity should do nothing if entity is missing in cache",
+    patches: [deleteEntity("notobj1")],
+    cacheBefore: { obj1: testObj1 },
+    cacheAfter: { obj1: testObj1 }
   }
 ];

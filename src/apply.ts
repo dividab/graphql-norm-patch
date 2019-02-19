@@ -75,7 +75,6 @@ function applyInvalidateEntity(
   const entity = cache[patch.id];
   if (entity !== undefined) {
     for (const entityKey of Object.keys(entity)) {
-      console.log(entityKey);
       invalidateRecursive(cache, staleEntities, entity[entityKey]);
     }
   }

@@ -103,8 +103,10 @@ function applyInvalidateField(
         ...staleEntities[patch.id],
         [fieldKey]: true
       };
-      // Shallow mutation of stale entities OK as we have a shallow copy
-      invalidateRecursive(cache, staleEntities, cache[patch.id][fieldKey]);
+      if (patch.recursive) {
+        // Shallow mutation of stale entities OK as we have a shallow copy
+        invalidateRecursive(cache, staleEntities, cache[patch.id][fieldKey]);
+      }
     }
   }
 }

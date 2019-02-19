@@ -21,58 +21,58 @@ export interface OneTest {
   readonly staleAfter?: StaleEntities;
 }
 
-const testObj1 = { id: "myid", name: "foo" };
-const testObj2 = { id: "myid", names: ["foo", "bar"] };
+const testObj1 = { id: "obj1", name: "foo" };
+const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const testObj3 = {
-  id: "myid",
+  id: "obj3",
   items: ["myitemid1", "myitemid2"]
 };
-const testObj4 = { id: "myid", ["names(id:1)"]: ["foo", "bar"] };
+const testObj4 = { id: "obj4", ["names(id:1)"]: ["foo", "bar"] };
 
 export const testData: ReadonlyArray<OneTest> = [
   {
     name: "createEntity",
-    patches: [createEntity("myid", testObj1)],
+    patches: [createEntity("obj1", testObj1)],
     cacheBefore: {},
-    cacheAfter: { myid: testObj1 }
+    cacheAfter: { obj1: testObj1 }
   },
   {
     name: "deleteEntity",
-    patches: [deleteEntity("myid")],
-    cacheBefore: { myid: testObj1 },
+    patches: [deleteEntity("obj1")],
+    cacheBefore: { obj1: testObj1 },
     cacheAfter: {}
   },
   {
     name: "updateField",
-    patches: [updateField<typeof testObj1>("myid", "name", "bar")],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: { id: "myid", name: "bar" } }
+    patches: [updateField<typeof testObj1>("obj1", "name", "bar")],
+    cacheBefore: { obj1: testObj1 },
+    cacheAfter: { obj1: { id: "obj1", name: "bar" } }
   },
   {
     name: "insertElement",
-    patches: [insertElement<typeof testObj2>("myid", "names", 0, "baz")],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: { id: "myid", names: ["baz", "foo", "bar"] } }
+    patches: [insertElement<typeof testObj2>("obj2", "names", 0, "baz")],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: { id: "obj2", names: ["baz", "foo", "bar"] } }
   },
   {
     name: "removeElement",
-    patches: [removeElement<typeof testObj2>("myid", "names", 0)],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: { id: "myid", names: ["bar"] } }
+    patches: [removeElement<typeof testObj2>("obj2", "names", 0)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: { id: "obj2", names: ["bar"] } }
   },
   {
     name: "removeEntityElement",
     patches: [
-      removeEntityElement<typeof testObj3>("myid", "items", "myitemid1")
+      removeEntityElement<typeof testObj3>("obj3", "items", "myitemid1")
     ],
     cacheBefore: {
-      myid: testObj3,
+      obj3: testObj3,
       myitemid1: { name: "first" },
       myitemid2: { name: "second" }
     },
     cacheAfter: {
-      myid: {
-        id: "myid",
+      obj3: {
+        id: "obj3",
         items: ["myitemid2"]
       },
       myitemid1: { name: "first" },
@@ -81,35 +81,43 @@ export const testData: ReadonlyArray<OneTest> = [
   },
   {
     name: "invalidateEntityShallow",
-    patches: [invalidateEntity("myid", false)],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: testObj2 },
+    patches: [invalidateEntity("obj2", false)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: testObj2 },
     staleBefore: {},
-    staleAfter: { myid: { id: true, names: true } }
+    staleAfter: { obj2: { id: true, names: true } }
   },
   {
     name: "invalidateEntityRecursive",
-    patches: [invalidateEntity("myid", true)],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: testObj2 },
+    patches: [invalidateEntity("obj2", true)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: testObj2 },
     staleBefore: {},
-    staleAfter: { myid: { id: true, names: true } }
+    staleAfter: { obj2: { id: true, names: true } }
   },
   {
     name: "invalidateFieldRecursive",
-    patches: [invalidateField<typeof testObj2>("myid", "names", true)],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: testObj2 },
+    patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: testObj2 },
     staleBefore: {},
-    staleAfter: { myid: { names: true } }
+    staleAfter: { obj2: { names: true } }
+  },
+  {
+    name: "invalidateFieldShallow",
+    patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: testObj2 },
+    staleBefore: {},
+    staleAfter: { obj2: { names: true } }
   },
   {
     name: "invalidateFieldWithParamsRecursive",
-    patches: [invalidateField<any>("myid", "names", true)],
-    cacheBefore: { myid: testObj4 },
-    cacheAfter: { myid: testObj4 },
+    patches: [invalidateField<any>("obj4", "names", true)],
+    cacheBefore: { obj4: testObj4 },
+    cacheAfter: { obj4: testObj4 },
     staleBefore: {},
-    staleAfter: { myid: { ["names(id:1)"]: true } }
+    staleAfter: { obj4: { ["names(id:1)"]: true } }
   },
   {
     name: "invalidateFieldRecursive",
@@ -136,27 +144,27 @@ export const testData: ReadonlyArray<OneTest> = [
   },
   {
     name: "deleteEntity should do nothing if entity is missing in cache",
-    patches: [deleteEntity("notmyid")],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 }
+    patches: [deleteEntity("notobj1")],
+    cacheBefore: { obj1: testObj1 },
+    cacheAfter: { obj1: testObj1 }
   },
   {
     name: "updateField should do nothing if entity is missing in cache",
-    patches: [updateField<typeof testObj1>("notmyid", "name", "bar")],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 }
+    patches: [updateField<typeof testObj1>("notobj1", "name", "bar")],
+    cacheBefore: { obj1: testObj1 },
+    cacheAfter: { obj1: testObj1 }
   },
   {
     name: "updateField should do nothing if field is missing in cache",
-    patches: [updateField<typeof testObj1>("myid", "name", "bar")],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: testObj2 }
+    patches: [updateField<typeof testObj1>("obj1", "name", "bar")],
+    cacheBefore: { obj1: testObj2 },
+    cacheAfter: { obj1: testObj2 }
   },
   {
     name: "updateField should update if the field is null",
-    patches: [updateField<typeof testObj1>("myid", "name", "bar")],
-    cacheBefore: { myid: { id: "myid", name: null } },
-    cacheAfter: { myid: { id: "myid", name: "bar" } }
+    patches: [updateField<typeof testObj1>("obj1", "name", "bar")],
+    cacheBefore: { obj1: { id: "myid", name: null } },
+    cacheAfter: { obj1: { id: "myid", name: "bar" } }
   },
   {
     name: "insertElement should do nothing if entity is missing in cache",
@@ -166,60 +174,60 @@ export const testData: ReadonlyArray<OneTest> = [
   },
   {
     name: "insertElement should do nothing if field is missing in cache",
-    patches: [insertElement<typeof testObj2>("myid", "names", 0, "baz")],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 }
+    patches: [insertElement<typeof testObj2>("obj1", "names", 0, "baz")],
+    cacheBefore: { obj1: testObj1 },
+    cacheAfter: { obj1: testObj1 }
   },
   {
     name: "removeElement should do nothing if entity is missing in cache",
-    patches: [removeElement<typeof testObj2>("notmyid", "names", 0)],
-    cacheBefore: { myid: testObj2 },
-    cacheAfter: { myid: testObj2 }
+    patches: [removeElement<typeof testObj2>("notobj2", "names", 0)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: testObj2 }
   },
   {
     name: "removeElement should do nothing if field is missing in cache",
-    patches: [removeElement<typeof testObj2>("myid", "names", 0)],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 }
+    patches: [removeElement<typeof testObj2>("obj1", "names", 0)],
+    cacheBefore: { obj1: testObj1 },
+    cacheAfter: { obj1: testObj1 }
   },
   {
     name: "removeEntityElement should do nothing if entity is missing in cache",
     patches: [
-      removeEntityElement<typeof testObj3>("notmyid", "items", "myitemid1")
+      removeEntityElement<typeof testObj3>("notobj3", "items", "myitemid1")
     ],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 }
+    cacheBefore: { obj3: testObj3 },
+    cacheAfter: { obj3: testObj3 }
   },
   {
     name: "removeEntityElement should do nothing if field is missing in cache",
     patches: [
-      removeEntityElement<typeof testObj3>("myid", "items", "myitemid1")
+      removeEntityElement<typeof testObj3>("obj3", "items", "myitemid1")
     ],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 }
+    cacheBefore: { obj3: testObj1 },
+    cacheAfter: { obj3: testObj1 }
   },
   {
     name:
       "invalidateFieldRecursive should do nothing if entity is missing in cache",
-    patches: [invalidateField<typeof testObj2>("notmyid", "names", true)],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 },
+    patches: [invalidateField<typeof testObj2>("notobj2", "names", true)],
+    cacheBefore: { obj2: testObj2 },
+    cacheAfter: { obj2: testObj2 },
     staleBefore: {},
     staleAfter: {}
   },
   {
     name:
       "invalidateFieldRecursive should do nothing if field is missing in cache",
-    patches: [invalidateField<typeof testObj2>("myid", "names", true)],
-    cacheBefore: { myid: testObj1 },
-    cacheAfter: { myid: testObj1 },
+    patches: [invalidateField<typeof testObj2>("obj2", "names", true)],
+    cacheBefore: { obj2: testObj1 },
+    cacheAfter: { obj2: testObj1 },
     staleBefore: {},
     staleAfter: {}
   },
   {
     name: "insertElement should create new array if the field is null",
-    patches: [insertElement<typeof testObj2>("myid", "names", 0, "baz")],
-    cacheBefore: { myid: { id: "myid", names: null } },
-    cacheAfter: { myid: { id: "myid", names: ["baz"] } }
+    patches: [insertElement<typeof testObj2>("obj2", "names", 0, "baz")],
+    cacheBefore: { obj2: { id: "obj2", names: null } },
+    cacheAfter: { obj2: { id: "obj2", names: ["baz"] } }
   }
 ];

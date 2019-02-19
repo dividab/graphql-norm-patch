@@ -14,12 +14,14 @@ export type CachePatch =
 export interface InvalidateEntity {
   readonly type: "InvalidateEntity";
   readonly id: string;
+  readonly recursive: boolean;
 }
 
 export interface InvalidateField {
   readonly type: "InvalidateField";
   readonly id: string;
   readonly fieldName: string;
+  readonly recursive: boolean;
 }
 
 export interface CreateEntity {
@@ -65,10 +67,14 @@ export interface RemoveEntityElement {
 /**
  *  Makes an entity stale in the cache
  */
-export function invalidateEntity(id: GraphQLCache.EntityId): InvalidateEntity {
+export function invalidateEntity(
+  id: GraphQLCache.EntityId,
+  recursive: boolean
+): InvalidateEntity {
   return {
     type: "InvalidateEntity",
-    id
+    id,
+    recursive
   };
 }
 
@@ -77,12 +83,14 @@ export function invalidateEntity(id: GraphQLCache.EntityId): InvalidateEntity {
  */
 export function invalidateField<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
-  fieldName: Extract<keyof T, string>
+  fieldName: Extract<keyof T, string>,
+  recursive: boolean
 ): InvalidateField {
   return {
     type: "InvalidateField",
     id,
-    fieldName
+    fieldName,
+    recursive
   };
 }
 

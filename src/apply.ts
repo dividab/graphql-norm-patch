@@ -79,7 +79,9 @@ function applyInvalidateEntity(
     };
     for (const entityKey of Object.keys(entity)) {
       newStaleEntity[entityKey] = true;
-      invalidateRecursive(cache, staleEntities, entity[entityKey]);
+      if (patch.recursive) {
+        invalidateRecursive(cache, staleEntities, entity[entityKey]);
+      }
     }
     staleEntities[patch.id] = newStaleEntity;
   }

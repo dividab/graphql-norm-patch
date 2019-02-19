@@ -74,10 +74,16 @@ function applyInvalidateEntity(
 ): void {
   const entity = cache[patch.id];
   if (entity !== undefined) {
+    const newStaleEntity: Mutable<GraphQLEntityCache.StaleEntity> = {
+      ...staleEntities[patch.id]
+    };
     for (const entityKey of Object.keys(entity)) {
-      console.log(entityKey);
-      invalidateRecursive(cache, staleEntities, entity[entityKey]);
+      newStaleEntity[entityKey] = true;
+      if (patch.recursive) {
+        invalidateRecursive(cache, staleEntities, entity[entityKey]);
+      }
     }
+    staleEntities[patch.id] = newStaleEntity;
   }
 }
 
@@ -104,8 +110,10 @@ function applyInvalidateField(
         ...staleEntities[patch.id],
         [fieldKey]: true
       };
-      // Shallow mutation of stale entities OK as we have a shallow copy
-      invalidateRecursive(cache, staleEntities, cache[patch.id][fieldKey]);
+      if (patch.recursive) {
+        // Shallow mutation of stale entities OK as we have a shallow copy
+        invalidateRecursive(cache, staleEntities, cache[patch.id][fieldKey]);
+      }
     }
   }
 }

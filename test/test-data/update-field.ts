@@ -4,6 +4,9 @@ import { OneTest } from "./one-test";
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const testObj3 = { id: "obj2", sortNo: 11 };
+const ROOT_QUERY = {
+  product: {}
+};
 
 export const updateFieldTestData: ReadonlyArray<OneTest> = [
   {
@@ -35,5 +38,27 @@ export const updateFieldTestData: ReadonlyArray<OneTest> = [
     patches: [updateField<typeof testObj3>("obj1", "sortNo", 0)],
     cacheBefore: { obj1: { id: "myid", sortNo: 12 } },
     cacheAfter: { obj1: { id: "myid", sortNo: 0 } }
+  },
+  {
+    name: "updateField with arguments should only update field with arguments",
+    patches: [
+      updateField<typeof ROOT_QUERY>("ROOT_QUERY", "product", null, { id: 2 })
+    ],
+    cacheBefore: {
+      ROOT_QUERY: {
+        'product({"id":1})': "Product;1",
+        'product({"id":2})': "Product;2"
+      },
+      "Product;1": { id: 1, sortNo: 0 },
+      "Product;2": { id: 2, sortNo: 0 }
+    },
+    cacheAfter: {
+      ROOT_QUERY: {
+        'product({"id":1})': "Product;1",
+        'product({"id":2})': null
+      },
+      "Product;1": { id: 1, sortNo: 0 },
+      "Product;2": { id: 2, sortNo: 0 }
+    }
   }
 ];

@@ -98,7 +98,7 @@ function applyInvalidateField(
     // For example the fields "products" and "products(ids: [1, 2])" should
     // both be invalidated if the field name "products" is specified
     const entityFieldKeys = Object.keys(cache[patch.id]).filter(
-      k => k.indexOf(patch.fieldName) !== -1
+      k => k.indexOf(withArgs(patch.fieldName, patch.fieldArguments)) !== -1
     );
 
     if (entityFieldKeys.length === 0) {
@@ -208,7 +208,7 @@ function applyUpdateField(
     // Shallow mutation of cache OK as we have a shallow copy
     cache[patch.id] = {
       ...cache[patch.id],
-      [patch.fieldName]: patch.newValue
+      [withArgs(patch.fieldName, patch.fieldArguments)]: patch.newValue
     };
   }
 }
@@ -218,17 +218,18 @@ function applyInsertElement(
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {
+    const fieldNameWithArgs = withArgs(patch.fieldName, patch.fieldArguments);
     // Shallow mutation of cache OK as we have a shallow copy
     // tslint:disable-next-line:no-any
     const arrCopy =
-      cache[patch.id][patch.fieldName] === null
+      cache[patch.id][fieldNameWithArgs] === null
         ? []
-        : [...(cache[patch.id][patch.fieldName] as Array<any>)];
+        : [...(cache[patch.id][fieldNameWithArgs] as Array<any>)];
     arrCopy.splice(patch.index, 0, patch.newValue);
 
     cache[patch.id] = {
       ...cache[patch.id],
-      [patch.fieldName]: arrCopy
+      [fieldNameWithArgs]: arrCopy
     };
   }
 }
@@ -238,13 +239,14 @@ function applyRemoveElement(
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {
+    const fieldNameWithArgs = withArgs(patch.fieldName, patch.fieldArguments);
     // tslint:disable-next-line:no-any
-    const arrCopy = [...(cache[patch.id][patch.fieldName] as Array<any>)];
+    const arrCopy = [...(cache[patch.id][fieldNameWithArgs] as Array<any>)];
     arrCopy.splice(patch.index, 1);
     // Shallow mutation of cache OK as we have a shallow copy
     cache[patch.id] = {
       ...cache[patch.id],
-      [patch.fieldName]: arrCopy
+      [fieldNameWithArgs]: arrCopy
     };
   }
 }
@@ -254,22 +256,31 @@ function applyRemoveEntityElement(
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {
-    const arr = cache[patch.id][patch.fieldName] as ReadonlyArray<
+    const fieldNameWithArgs = withArgs(patch.fieldName, patch.fieldArguments);
+    const arr = cache[patch.id][fieldNameWithArgs] as ReadonlyArray<
       GraphQLEntityCache.EntityId
     >;
     // Shallow mutation of cache OK as we have a shallow copy
     cache[patch.id] = {
       ...cache[patch.id],
-      [patch.fieldName]: arr.filter(x => x !== patch.entityId)
+      [fieldNameWithArgs]: arr.filter(x => x !== patch.entityId)
     };
   }
 }
 
 function entityAndFieldExists(
   cache: GraphQLEntityCache.EntityCache,
-  patch: { readonly id: string; readonly fieldName: string }
+  patch: {
+    readonly id: string;
+    readonly fieldName: string;
+    readonly fieldArguments: CachePatch.FieldArguments | undefined;
+  }
 ): boolean {
-  return !!(cache[patch.id] && cache[patch.id][patch.fieldName] !== undefined);
+  return !!(
+    cache[patch.id] &&
+    cache[patch.id][withArgs(patch.fieldName, patch.fieldArguments)] !==
+      undefined
+  );
 }
 
 function entityExists(
@@ -277,4 +288,15 @@ function entityExists(
   patch: { readonly id: string }
 ): boolean {
   return !!cache[patch.id];
+}
+
+function withArgs(
+  fieldName: string,
+  fieldArguments: CachePatch.FieldArguments | undefined
+): string {
+  if (fieldArguments === undefined) {
+    return fieldName;
+  }
+  const hashedArgs = JSON.stringify(fieldArguments);
+  return fieldName + "(" + hashedArgs + ")";
 }

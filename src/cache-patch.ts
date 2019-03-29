@@ -1,5 +1,7 @@
 import * as GraphQLCache from "gql-cache";
 
+export type FieldArguments = {};
+
 // A definition of an operation that modifies an entity
 export type CachePatch =
   | InvalidateEntity
@@ -22,6 +24,7 @@ export interface InvalidateField {
   readonly id: string;
   readonly fieldName: string;
   readonly recursive: boolean;
+  readonly fieldArguments: FieldArguments | undefined;
 }
 
 export interface CreateEntity {
@@ -40,6 +43,7 @@ export interface UpdateField {
   readonly id: string;
   readonly fieldName: string;
   readonly newValue: GraphQLCache.EntityFieldValue | null;
+  readonly fieldArguments: FieldArguments | undefined;
 }
 
 export interface InsertElement {
@@ -48,6 +52,7 @@ export interface InsertElement {
   readonly fieldName: string;
   readonly index: number;
   readonly newValue: GraphQLCache.EntityFieldValue;
+  readonly fieldArguments: FieldArguments | undefined;
 }
 
 export interface RemoveElement {
@@ -55,6 +60,7 @@ export interface RemoveElement {
   readonly id: GraphQLCache.EntityId;
   readonly fieldName: string;
   readonly index: number;
+  readonly fieldArguments: FieldArguments | undefined;
 }
 
 export interface RemoveEntityElement {
@@ -62,6 +68,7 @@ export interface RemoveEntityElement {
   readonly id: GraphQLCache.EntityId;
   readonly fieldName: string;
   readonly entityId: GraphQLCache.EntityId;
+  readonly fieldArguments: FieldArguments | undefined;
 }
 
 /**
@@ -84,13 +91,15 @@ export function invalidateEntity(
 export function invalidateField<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
-  recursive: boolean
+  recursive: boolean,
+  fieldArguments?: FieldArguments
 ): InvalidateField {
   return {
     type: "InvalidateField",
     id,
     fieldName,
-    recursive
+    recursive,
+    fieldArguments
   };
 }
 
@@ -118,9 +127,10 @@ export function deleteEntity(id: GraphQLCache.EntityId): DeleteEntity {
 export function updateField<T = GraphQLCache.Entity>(
   id: string,
   fieldName: Extract<keyof T, string>,
-  newValue: GraphQLCache.EntityFieldValue | null
+  newValue: GraphQLCache.EntityFieldValue | null,
+  fieldArguments?: FieldArguments
 ): UpdateField {
-  return { type: "UpdateField", id, fieldName, newValue };
+  return { type: "UpdateField", id, fieldName, newValue, fieldArguments };
 }
 
 /**
@@ -130,9 +140,17 @@ export function insertElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   index: number,
-  newValue: GraphQLCache.EntityFieldValue
+  newValue: GraphQLCache.EntityFieldValue,
+  fieldArguments?: FieldArguments
 ): InsertElement {
-  return { type: "InsertElement", id, fieldName, index, newValue };
+  return {
+    type: "InsertElement",
+    id,
+    fieldName,
+    index,
+    newValue,
+    fieldArguments
+  };
 }
 
 /**
@@ -141,9 +159,10 @@ export function insertElement<T = GraphQLCache.Entity>(
 export function removeElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
-  index: number
+  index: number,
+  fieldArguments?: FieldArguments
 ): RemoveElement {
-  return { type: "RemoveElement", id, fieldName, index };
+  return { type: "RemoveElement", id, fieldName, index, fieldArguments };
 }
 
 /**
@@ -152,7 +171,14 @@ export function removeElement<T = GraphQLCache.Entity>(
 export function removeEntityElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
-  entityId: GraphQLCache.EntityId
+  entityId: GraphQLCache.EntityId,
+  fieldArguments?: FieldArguments
 ): RemoveEntityElement {
-  return { type: "RemoveEntityElement", id, fieldName, entityId };
+  return {
+    type: "RemoveEntityElement",
+    id,
+    fieldName,
+    entityId,
+    fieldArguments
+  };
 }

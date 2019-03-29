@@ -3,6 +3,7 @@ import { OneTest } from "./one-test";
 
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
+const testObj3 = { id: "obj2", sortNo: 11 };
 
 export const updateFieldTestData: ReadonlyArray<OneTest> = [
   {
@@ -28,5 +29,11 @@ export const updateFieldTestData: ReadonlyArray<OneTest> = [
     patches: [updateField<typeof testObj1>("obj1", "name", "bar")],
     cacheBefore: { obj1: { id: "myid", name: null } },
     cacheAfter: { obj1: { id: "myid", name: "bar" } }
+  },
+  {
+    name: "updateField should update zero",
+    patches: [updateField<typeof testObj3>("obj1", "sortNo", 0)],
+    cacheBefore: { obj1: { id: "myid", sortNo: 12 } },
+    cacheAfter: { obj1: { id: "myid", sortNo: 0 } }
   }
 ];

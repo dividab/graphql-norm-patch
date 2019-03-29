@@ -86,7 +86,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
   },
   {
     name:
-      "invalidateField with arguments should only update field with arguments",
+      "invalidateField with arguments should only invalidate field with arguments",
     patches: [
       invalidateField<typeof ROOT_QUERY>("ROOT_QUERY", "product", false, {
         id: 2

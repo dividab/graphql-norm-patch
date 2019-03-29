@@ -1,5 +1,6 @@
 import { OneTest } from "./one-test";
 import { invalidateField } from "../../src";
+const ROOT_QUERY = { product: {} };
 
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
@@ -82,5 +83,34 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     cacheAfter: { obj2: testObj1 },
     staleBefore: {},
     staleAfter: {}
+  },
+  {
+    name:
+      "invalidateField with arguments should only update field with arguments",
+    patches: [
+      invalidateField<typeof ROOT_QUERY>("ROOT_QUERY", "product", false, {
+        id: 2
+      })
+    ],
+    cacheBefore: {
+      ROOT_QUERY: {
+        'product({"id":1})': "Product;1",
+        'product({"id":2})': "Product;2"
+      },
+      "Product;1": { id: 1, sortNo: 0 },
+      "Product;2": { id: 2, sortNo: 0 }
+    },
+    cacheAfter: {
+      ROOT_QUERY: {
+        'product({"id":1})': "Product;1",
+        'product({"id":2})': "Product;2"
+      },
+      "Product;1": { id: 1, sortNo: 0 },
+      "Product;2": { id: 2, sortNo: 0 }
+    },
+    staleBefore: {},
+    staleAfter: {
+      ROOT_QUERY: { 'product({"id":2})': true }
+    }
   }
 ];

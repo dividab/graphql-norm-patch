@@ -140,7 +140,7 @@ export function insertElement<T = GraphQLCache.Entity>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   index: number,
-  newValue: GraphQLCache.EntityFieldValue,
+  newValue: GraphQLCache.EntityFieldValue | null,
   fieldArguments?: FieldArguments
 ): InsertElement {
   return {

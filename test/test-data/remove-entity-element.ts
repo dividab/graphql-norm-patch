@@ -2,11 +2,11 @@ import { OneTest } from "./one-test";
 import { removeEntityElement } from "../../src";
 
 const testObj1 = { id: "obj1", name: "foo" };
-
 const testObj3 = {
   id: "obj3",
   items: ["myitemid1", "myitemid2"]
 };
+const ROOT_QUERY = { products: [] };
 
 export const removeEntityElementTestData: ReadonlyArray<OneTest> = [
   {
@@ -43,5 +43,35 @@ export const removeEntityElementTestData: ReadonlyArray<OneTest> = [
     ],
     cacheBefore: { obj3: testObj1 },
     cacheAfter: { obj3: testObj1 }
+  },
+  {
+    name:
+      "removeEntityElement with arguments should only remove in field with arguments",
+    patches: [
+      removeEntityElement<typeof ROOT_QUERY>(
+        "ROOT_QUERY",
+        "products",
+        "Product;2",
+        {
+          category: 2
+        }
+      )
+    ],
+    cacheBefore: {
+      ROOT_QUERY: {
+        'products({"category":1})': ["Product;1", "Product;2"],
+        'products({"category":2})': [null, "Product;2"]
+      },
+      "Product;1": { id: 1, sortNo: 0 },
+      "Product;2": { id: 2, sortNo: 0 }
+    },
+    cacheAfter: {
+      ROOT_QUERY: {
+        'products({"category":1})': ["Product;1", "Product;2"],
+        'products({"category":2})': [null]
+      },
+      "Product;1": { id: 1, sortNo: 0 },
+      "Product;2": { id: 2, sortNo: 0 }
+    }
   }
 ];

@@ -4,6 +4,7 @@ import { insertElement } from "../../src";
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const ROOT_QUERY = { products: [] };
+type CategoryArgs = { readonly category: number };
 
 export const insertElementTestData: ReadonlyArray<OneTest> = [
   {
@@ -34,9 +35,15 @@ export const insertElementTestData: ReadonlyArray<OneTest> = [
     name:
       "insertElement with arguments should only insert in field with arguments",
     patches: [
-      insertElement<typeof ROOT_QUERY>("ROOT_QUERY", "products", 0, null, {
-        category: 2
-      })
+      insertElement<typeof ROOT_QUERY, CategoryArgs>(
+        "ROOT_QUERY",
+        "products",
+        0,
+        null,
+        {
+          category: 2
+        }
+      )
     ],
     cacheBefore: {
       ROOT_QUERY: {

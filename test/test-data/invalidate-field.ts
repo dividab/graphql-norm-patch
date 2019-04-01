@@ -5,6 +5,7 @@ const ROOT_QUERY = { product: {} };
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const testObj4 = { id: "obj4", ["names(id:1)"]: ["foo", "bar"] };
+type IdArgs = { readonly id: number };
 
 export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
   {
@@ -88,9 +89,12 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     name:
       "invalidateField with arguments should only invalidate field with arguments",
     patches: [
-      invalidateField<typeof ROOT_QUERY>("ROOT_QUERY", "product", false, {
-        id: 2
-      })
+      invalidateField<typeof ROOT_QUERY, IdArgs>(
+        "ROOT_QUERY",
+        "product",
+        false,
+        { id: 2 }
+      )
     ],
     cacheBefore: {
       ROOT_QUERY: {

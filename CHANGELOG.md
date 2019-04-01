@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Generic type argument for field arguments [#10](https://github.com/dividab/gql-cache-patch/pull/10).
+
 ## [v0.11.0] - 2019-03-29
 
 ### Added

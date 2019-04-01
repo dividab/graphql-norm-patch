@@ -4,6 +4,7 @@ import { removeElement } from "../../src";
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const ROOT_QUERY = { products: [] };
+type CategoryArgs = { readonly category: number };
 
 export const removeElementTestData: ReadonlyArray<OneTest> = [
   {
@@ -28,9 +29,14 @@ export const removeElementTestData: ReadonlyArray<OneTest> = [
     name:
       "removeElement with arguments should only remove in field with arguments",
     patches: [
-      removeElement<typeof ROOT_QUERY>("ROOT_QUERY", "products", 0, {
-        category: 2
-      })
+      removeElement<typeof ROOT_QUERY, CategoryArgs>(
+        "ROOT_QUERY",
+        "products",
+        0,
+        {
+          category: 2
+        }
+      )
     ],
     cacheBefore: {
       ROOT_QUERY: {

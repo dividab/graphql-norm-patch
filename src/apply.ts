@@ -273,7 +273,7 @@ function entityAndFieldExists(
   patch: {
     readonly id: string;
     readonly fieldName: string;
-    readonly fieldArguments: CachePatch.FieldArguments | undefined;
+    readonly fieldArguments: {} | undefined;
   }
 ): boolean {
   return !!(
@@ -290,10 +290,7 @@ function entityExists(
   return !!cache[patch.id];
 }
 
-function withArgs(
-  fieldName: string,
-  fieldArguments: CachePatch.FieldArguments | undefined
-): string {
+function withArgs(fieldName: string, fieldArguments: {} | undefined): string {
   if (fieldArguments === undefined) {
     return fieldName;
   }

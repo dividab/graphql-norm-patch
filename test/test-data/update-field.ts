@@ -5,6 +5,7 @@ const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const testObj3 = { id: "obj2", sortNo: 11 };
 const ROOT_QUERY = { product: {} };
+type IdArgs = { readonly id: number };
 
 export const updateFieldTestData: ReadonlyArray<OneTest> = [
   {
@@ -40,7 +41,9 @@ export const updateFieldTestData: ReadonlyArray<OneTest> = [
   {
     name: "updateField with arguments should only update field with arguments",
     patches: [
-      updateField<typeof ROOT_QUERY>("ROOT_QUERY", "product", null, { id: 2 })
+      updateField<typeof ROOT_QUERY, IdArgs>("ROOT_QUERY", "product", null, {
+        id: 2
+      })
     ],
     cacheBefore: {
       ROOT_QUERY: {

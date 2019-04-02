@@ -7,6 +7,7 @@ const testObj3 = {
   items: ["myitemid1", "myitemid2"]
 };
 const ROOT_QUERY = { products: [] };
+type CategoryArgs = { readonly category: number };
 
 export const removeEntityElementTestData: ReadonlyArray<OneTest> = [
   {
@@ -48,7 +49,7 @@ export const removeEntityElementTestData: ReadonlyArray<OneTest> = [
     name:
       "removeEntityElement with arguments should only remove in field with arguments",
     patches: [
-      removeEntityElement<typeof ROOT_QUERY>(
+      removeEntityElement<typeof ROOT_QUERY, CategoryArgs>(
         "ROOT_QUERY",
         "products",
         "Product;2",

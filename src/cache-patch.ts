@@ -1,7 +1,5 @@
 import * as GraphQLCache from "gql-cache";
 
-export type FieldArguments = {};
-
 // A definition of an operation that modifies an entity
 export type CachePatch =
   | InvalidateEntity
@@ -24,7 +22,7 @@ export interface InvalidateField {
   readonly id: string;
   readonly fieldName: string;
   readonly recursive: boolean;
-  readonly fieldArguments: FieldArguments | undefined;
+  readonly fieldArguments: {} | undefined;
 }
 
 export interface CreateEntity {
@@ -43,7 +41,7 @@ export interface UpdateField {
   readonly id: string;
   readonly fieldName: string;
   readonly newValue: GraphQLCache.EntityFieldValue | null;
-  readonly fieldArguments: FieldArguments | undefined;
+  readonly fieldArguments: {} | undefined;
 }
 
 export interface InsertElement {
@@ -52,7 +50,7 @@ export interface InsertElement {
   readonly fieldName: string;
   readonly index: number;
   readonly newValue: GraphQLCache.EntityFieldValue;
-  readonly fieldArguments: FieldArguments | undefined;
+  readonly fieldArguments: {} | undefined;
 }
 
 export interface RemoveElement {
@@ -60,7 +58,7 @@ export interface RemoveElement {
   readonly id: GraphQLCache.EntityId;
   readonly fieldName: string;
   readonly index: number;
-  readonly fieldArguments: FieldArguments | undefined;
+  readonly fieldArguments: {} | undefined;
 }
 
 export interface RemoveEntityElement {
@@ -68,7 +66,7 @@ export interface RemoveEntityElement {
   readonly id: GraphQLCache.EntityId;
   readonly fieldName: string;
   readonly entityId: GraphQLCache.EntityId;
-  readonly fieldArguments: FieldArguments | undefined;
+  readonly fieldArguments: {} | undefined;
 }
 
 /**
@@ -88,11 +86,11 @@ export function invalidateEntity(
 /**
  *  Makes a field stale in the cache
  */
-export function invalidateField<T = GraphQLCache.Entity>(
+export function invalidateField<T = GraphQLCache.Entity, A extends {} = {}>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   recursive: boolean,
-  fieldArguments?: FieldArguments
+  fieldArguments?: A
 ): InvalidateField {
   return {
     type: "InvalidateField",
@@ -124,11 +122,11 @@ export function deleteEntity(id: GraphQLCache.EntityId): DeleteEntity {
 /**
  * Update a simple field value like a string or boolean
  */
-export function updateField<T = GraphQLCache.Entity>(
-  id: GraphQLCache.EntityId,
+export function updateField<T = GraphQLCache.Entity, A extends {} = {}>(
+  id: string,
   fieldName: Extract<keyof T, string>,
   newValue: GraphQLCache.EntityFieldValue | null,
-  fieldArguments?: FieldArguments
+  fieldArguments?: A
 ): UpdateField {
   return { type: "UpdateField", id, fieldName, newValue, fieldArguments };
 }
@@ -136,12 +134,12 @@ export function updateField<T = GraphQLCache.Entity>(
 /**
  * Inserts an element into an array-field in an entity
  */
-export function insertElement<T = GraphQLCache.Entity>(
+export function insertElement<T = GraphQLCache.Entity, A extends {} = {}>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   index: number,
   newValue: GraphQLCache.EntityFieldValue | null,
-  fieldArguments?: FieldArguments
+  fieldArguments?: A
 ): InsertElement {
   return {
     type: "InsertElement",
@@ -156,11 +154,11 @@ export function insertElement<T = GraphQLCache.Entity>(
 /**
  * Remove an element from an array-field in an entity
  */
-export function removeElement<T = GraphQLCache.Entity>(
+export function removeElement<T = GraphQLCache.Entity, A extends {} = {}>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   index: number,
-  fieldArguments?: FieldArguments
+  fieldArguments?: A
 ): RemoveElement {
   return { type: "RemoveElement", id, fieldName, index, fieldArguments };
 }
@@ -168,11 +166,11 @@ export function removeElement<T = GraphQLCache.Entity>(
 /**
  * Remove all occurances of elements with specified ID from an array-field in an entity
  */
-export function removeEntityElement<T = GraphQLCache.Entity>(
+export function removeEntityElement<T = GraphQLCache.Entity, A extends {} = {}>(
   id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   entityId: GraphQLCache.EntityId,
-  fieldArguments?: FieldArguments
+  fieldArguments?: A
 ): RemoveEntityElement {
   return {
     type: "RemoveEntityElement",

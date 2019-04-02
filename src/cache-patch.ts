@@ -125,7 +125,7 @@ export function deleteEntity(id: GraphQLCache.EntityId): DeleteEntity {
  * Update a simple field value like a string or boolean
  */
 export function updateField<T = GraphQLCache.Entity>(
-  id: string,
+  id: GraphQLCache.EntityId,
   fieldName: Extract<keyof T, string>,
   newValue: GraphQLCache.EntityFieldValue | null,
   fieldArguments?: FieldArguments

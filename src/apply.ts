@@ -37,6 +37,10 @@ export function apply(
         applyCreateEntity(patch, cacheCopy);
         break;
       }
+      case "UpdateEntity": {
+        applyUpdateEntity(patch, cacheCopy);
+        break;
+      }
       case "DeleteEntity": {
         applyDeleteEntity(patch, cacheCopy);
         break;
@@ -188,6 +192,16 @@ function applyCreateEntity(
 ): void {
   // Shallow mutation OK as we have a shallow copy
   cache[patch.id] = patch.newValue;
+}
+
+function applyUpdateEntity(
+  patch: CachePatch.UpdateEntity,
+  cache: MutableEntityCache
+): void {
+  if (entityExists(cache, patch)) {
+    // Shallow mutation OK as we have a shallow copy
+    cache[patch.id] = { ...cache[patch.id], ...patch.newValues };
+  }
 }
 
 function applyDeleteEntity(

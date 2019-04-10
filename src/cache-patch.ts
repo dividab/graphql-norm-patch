@@ -6,6 +6,7 @@ export type CachePatch =
   | InvalidateField
   | CreateEntity
   | DeleteEntity
+  | UpdateEntity
   | UpdateField
   | InsertElement
   | RemoveElement
@@ -29,6 +30,12 @@ export interface CreateEntity {
   readonly type: "CreateEntity";
   readonly id: GraphQLCache.EntityId;
   readonly newValue: GraphQLCache.Entity;
+}
+
+export interface UpdateEntity {
+  readonly type: "UpdateEntity";
+  readonly id: GraphQLCache.EntityId;
+  readonly newValues: GraphQLCache.Entity;
 }
 
 export interface DeleteEntity {
@@ -110,6 +117,17 @@ export function createEntity<T = GraphQLCache.Entity>(
 ): CreateEntity {
   // tslint:disable-next-line:no-any
   return { type: "CreateEntity", id, newValue: newValue as any };
+}
+
+/**
+ * Update multiple fields (without arguments) on an existing entity
+ */
+export function updateEntity<T = GraphQLCache.Entity>(
+  id: GraphQLCache.EntityId,
+  newValues: Partial<T>
+): UpdateEntity {
+  // tslint:disable-next-line:no-any
+  return { type: "UpdateEntity", id, newValues: newValues as any };
 }
 
 /**

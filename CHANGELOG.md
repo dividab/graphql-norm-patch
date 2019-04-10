@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.13.0] - 2019-04-10
+
 ### Added
 
 - Added patch of type `UpdateEntity` to update multiple fields (without arguments) [#6](https://github.com/dividab/gql-cache-patch/issues/6).

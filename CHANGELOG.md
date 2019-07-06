@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [v0.13.0] - 2019-07-06
+## [v0.14.0] - 2019-07-06
 
 ### Changed
 
 - Renamed the package from `gql-cache-patch` to `graphql-norm-patch`.
+
+## [v0.13.0] - 2019-04-10
 
 ### Added
 

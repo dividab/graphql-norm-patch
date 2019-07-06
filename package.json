@@ -1,22 +1,22 @@
 {
-  "name": "gql-cache-patch",
+  "name": "graphql-norm-patch",
   "version": "0.12.0",
-  "description": "Declarative patching for gql-cache",
+  "description": "Declarative patching of normalized GraphQL responses",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dividab/gql-cache-patch.git"
+    "url": "git+https://github.com/dividab/graphql-norm-patch.git"
   },
   "keywords": [
     "graphql",
-    "cache",
+    "patch",
     "normalization"
   ],
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
   "dependencies": {
-    "gql-cache": "^0.9.2"
+    "graphql-norm": "^0.11.0"
   },
   "peerDependencies": {
     "@types/graphql": "^0.13.0 || ^14.0.0",
@@ -43,10 +43,11 @@
     "test": "tape --require ts-node/register \"test/**/*.ts\" | tap-spec",
     "build": "rimraf lib && tsc -p src",
     "verify": "yarn lint && yarn build && yarn coverage",
-    "publish-npm": "yarn verify && yarn publish && git push --follow-tags",
     "precommit": "lint-staged",
     "coverage": "rimraf coverage .nyc_output && nyc yarn test",
-    "report-coverage": "codecov -f coverage/*.json"
+    "report-coverage": "codecov -f coverage/*.json",
+    "preversion": "yarn verify",
+    "postversion": "git push --tags && yarn publish --new-version $npm_package_version && git push --follow-tags && echo \"Successfully released version $npm_package_version!\""
   },
   "lint-staged": {
     "*.{ts,tsx}": "tslint",

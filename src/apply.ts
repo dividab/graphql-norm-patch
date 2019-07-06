@@ -1,5 +1,5 @@
 import * as CachePatch from "./cache-patch";
-import * as GraphQLEntityCache from "gql-cache";
+import * as GraphQLEntityCache from "graphql-norm";
 
 interface MutableStaleEntities {
   // tslint:disable-next-line:readonly-keyword

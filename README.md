@@ -1,4 +1,4 @@
-# gql-cache-patch
+# graphql-norm-patch
 
 [![npm version][version-image]][version-url]
 [![travis build][travis-image]][travis-url]
@@ -6,11 +6,11 @@
 [![code style: prettier][prettier-image]][prettier-url]
 [![MIT license][license-image]][license-url]
 
-Declarative patching for [gql-cache](https://www.npmjs.com/package/gql-cache)
+Declarative patching of normalized GraphQL responses
 
 ## Overview
 
-This package contains functions to do declarative patching of [gql-cache](https://www.npmjs.com/package/gql-cache). It should also work with any cache that is a plain JS object with a flat normalized structure.
+This package contains functions to do declarative patching of normalized GraphQL responses. I was design to work with [graphql-norm](https://www.npmjs.com/package/graphql-norm) but it should also work with any plain JS object that contains a normalized structure of GraphQL responses.
 
 You can declare patches as data and then apply them. One usage is to apply optimistic updates to the cache when doing mutations.
 
@@ -19,7 +19,7 @@ Since the patches are data you can also return patches from the server. So the s
 ## How to install
 
 ```
-npm install gql-cache-patch --save
+npm install graphql-norm-patch --save
 ```
 
 ## How to use
@@ -73,7 +73,7 @@ export function apply(
 Here is a small example:
 
 ```js
-import { createEntity, apply } from "gql-cache-patch";
+import { createEntity, apply } from "graphql-norm-patch";
 
 const cache = {};
 const stale = {};
@@ -95,7 +95,7 @@ Applying patches that specify a field name will only have effect if that field n
 This package has built-in typescript types, and when using typescript some type saftey can be achieved by using types generated for the GraphQL schema. Types for the schema can be genereted using for example [graphql-code-generator](https://www.npmjs.com/package/graphql-code-generator) and then be used as this:
 
 ```ts
-import { updateField } from "gql-cache-patch";
+import { updateField } from "graphql-norm-patch";
 
 const patch = updateField<GraphQLSchemaTypes.Foo>("myid", "myfield", "myvalue");
 ```
@@ -104,13 +104,25 @@ const patch = updateField<GraphQLSchemaTypes.Foo>("myid", "myfield", "myvalue");
 
 It would be interesting to investigate returning patches as an [extension](http://facebook.github.io/graphql/June2018/#sec-Response-Format) of the graphql response.
 
-[version-image]: https://img.shields.io/npm/v/gql-cache-patch.svg?style=flat
-[version-url]: https://www.npmjs.com/package/gql-cache-patch
-[travis-image]: https://travis-ci.com/dividab/gql-cache-patch.svg?branch=master&style=flat
-[travis-url]: https://travis-ci.com/dividab/gql-cache-patch
-[codecov-image]: https://codecov.io/gh/dividab/gql-cache-patch/branch/master/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/dividab/gql-cache-patch
-[license-image]: https://img.shields.io/github/license/dividab/gql-cache-patch.svg?style=flat
+## How to develop
+
+To execute the tests run `yarn test`.
+
+## How to publish
+
+```
+yarn version --patch
+yarn version --minor
+yarn version --major
+```
+
+[version-image]: https://img.shields.io/npm/v/graphql-norm-patch.svg?style=flat
+[version-url]: https://www.npmjs.com/package/graphql-norm-patch
+[travis-image]: https://travis-ci.com/dividab/graphql-norm-patch.svg?branch=master&style=flat
+[travis-url]: https://travis-ci.com/dividab/graphql-norm-patch
+[codecov-image]: https://codecov.io/gh/dividab/graphql-norm-patch/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/dividab/graphql-norm-patch
+[license-image]: https://img.shields.io/github/license/dividab/graphql-norm-patch.svg?style=flat
 [license-url]: https://opensource.org/licenses/MIT
 [prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat
 [prettier-url]: https://github.com/prettier/prettier

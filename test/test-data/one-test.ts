@@ -1,4 +1,4 @@
-import { EntityCache, StaleEntities } from "gql-cache";
+import { EntityCache, StaleEntities } from "graphql-norm";
 import { CachePatch } from "../../src";
 
 export interface OneTest {

@@ -1,4 +1,4 @@
-import * as GraphQLCache from "gql-cache";
+import * as GraphQLCache from "graphql-norm";
 
 // A definition of an operation that modifies an entity
 export type CachePatch =

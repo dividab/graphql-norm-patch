@@ -16,7 +16,8 @@
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
   "dependencies": {
-    "graphql-norm": "^0.11.0"
+    "graphql-norm": "^1.1.0",
+    "graphql-norm-stale": "^0.1.2"
   },
   "peerDependencies": {
     "@types/graphql": "^0.13.0 || ^14.0.0",
@@ -24,28 +25,31 @@
   },
   "devDependencies": {
     "@types/graphql": "^14.0.0",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.8",
     "@types/tape": "^4.2.32",
     "codecov": "^3.1.0",
     "graphql": "^14.0.2",
     "husky": "^0.14.3",
+    "jest": "^24.9.0",
     "lint-staged": "^7.2.2",
-    "nyc": "^12.0.2",
     "prettier": "^1.14.2",
     "rimraf": "^2.6.2",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.9.1",
-    "ts-node": "^8.0.2",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.6.3"
   },
   "scripts": {
     "lint": "tslint --config ./tslint.json -- './{src,test}/**/*.ts{,x}'",
-    "test": "tape --require ts-node/register \"test/**/*.ts\" | tap-spec",
     "build": "rimraf lib && tsc -p src",
-    "verify": "yarn lint && yarn build && yarn coverage",
+    "build-test": "rimraf test/lib && tsc -p test",
+    "verify": "yarn lint && yarn build && yarn test-coverage",
     "precommit": "lint-staged",
-    "coverage": "rimraf coverage .nyc_output && nyc yarn test",
-    "report-coverage": "codecov -f coverage/*.json",
+    "report-coverage": "codecov -f coverage/lcov.info",
+    "test-coverage": "jest",
+    "test": "jest --no-coverage",
+    "test:work": "jest --no-coverage ./test/denormalize.test.ts",
     "preversion": "yarn verify",
     "postversion": "git push --tags && yarn publish --new-version $npm_package_version && git push --follow-tags && echo \"Successfully released version $npm_package_version!\""
   },

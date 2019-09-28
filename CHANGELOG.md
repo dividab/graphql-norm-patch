@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade `graphql-norm` package and switch to jest for testing. See PR [#12](https://github.com/dividab/graphql-norm-patch/pull/12).
+
 ## [v0.14.0] - 2019-07-06
 
 ### Changed

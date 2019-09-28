@@ -1,22 +1,22 @@
 import * as CachePatch from "./cache-patch";
-import * as GraphQLEntityCache from "graphql-norm";
-import * as GraphQLNormStale from "graphql-norm-stale";
+import { NormObj, NormMap, NormFieldValue, NormKey } from "graphql-norm";
+import { StaleFields, StaleMap } from "graphql-norm-stale";
 
 interface MutableStaleEntities {
   // tslint:disable-next-line:readonly-keyword
-  [key: string]: GraphQLNormStale.StaleFields | undefined;
+  [key: string]: StaleFields | undefined;
 }
 
 interface MutableEntityCache {
   // tslint:disable-next-line:readonly-keyword
-  [id: string]: GraphQLEntityCache.NormObj;
+  [id: string]: NormObj;
 }
 
 export function apply(
   patches: ReadonlyArray<CachePatch.CachePatch>,
-  cache: GraphQLEntityCache.NormMap,
-  staleEntities: GraphQLNormStale.StaleMap
-): [GraphQLEntityCache.NormMap, GraphQLNormStale.StaleMap] {
+  cache: NormMap,
+  staleEntities: StaleMap
+): [NormMap, StaleMap] {
   if (patches.length === 0) {
     return [cache, staleEntities];
   }
@@ -74,12 +74,12 @@ export function apply(
 
 function applyInvalidateEntity(
   patch: CachePatch.InvalidateEntity,
-  cache: GraphQLEntityCache.NormMap,
+  cache: NormMap,
   staleEntities: MutableStaleEntities
 ): void {
   const entity = cache[patch.id];
   if (entity !== undefined) {
-    const newStaleEntity: Mutable<GraphQLNormStale.StaleFields> = {
+    const newStaleEntity: Mutable<StaleFields> = {
       ...staleEntities[patch.id]
     };
     for (const entityKey of Object.keys(entity)) {
@@ -94,7 +94,7 @@ function applyInvalidateEntity(
 
 function applyInvalidateField(
   patch: CachePatch.InvalidateField,
-  cache: GraphQLEntityCache.NormMap,
+  cache: NormMap,
   staleEntities: MutableStaleEntities
 ): void {
   if (cache[patch.id] !== undefined) {
@@ -126,9 +126,9 @@ function applyInvalidateField(
 export declare type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 
 function invalidateRecursive(
-  cache: GraphQLEntityCache.NormMap,
+  cache: NormMap,
   staleEntities: MutableStaleEntities,
-  startingEntity: GraphQLEntityCache.NormFieldValue | null
+  startingEntity: NormFieldValue | null
 ): void {
   if (
     typeof startingEntity === "number" ||
@@ -154,7 +154,7 @@ function invalidateRecursive(
       continue;
     }
     const entityFieldKeys = Object.keys(entity);
-    const newStaleEntity: Mutable<GraphQLNormStale.StaleFields> = {
+    const newStaleEntity: Mutable<StaleFields> = {
       ...staleEntities[entityId]
     };
 
@@ -177,9 +177,9 @@ function invalidateRecursive(
 }
 
 function isArrayOfEntityIds(
-  cache: GraphQLEntityCache.NormMap,
-  field: GraphQLEntityCache.NormFieldValue | null
-): field is ReadonlyArray<GraphQLEntityCache.NormKey> {
+  cache: NormMap,
+  field: NormFieldValue | null
+): field is ReadonlyArray<NormKey> {
   if (Array.isArray(field) && field.some(x => !!cache[x])) {
     return true;
   }
@@ -272,9 +272,7 @@ function applyRemoveEntityElement(
 ): void {
   if (entityAndFieldExists(cache, patch)) {
     const fieldNameWithArgs = withArgs(patch.fieldName, patch.fieldArguments);
-    const arr = cache[patch.id][fieldNameWithArgs] as ReadonlyArray<
-      GraphQLEntityCache.NormKey
-    >;
+    const arr = cache[patch.id][fieldNameWithArgs] as ReadonlyArray<NormKey>;
     // Shallow mutation of cache OK as we have a shallow copy
     cache[patch.id] = {
       ...cache[patch.id],
@@ -284,7 +282,7 @@ function applyRemoveEntityElement(
 }
 
 function entityAndFieldExists(
-  cache: GraphQLEntityCache.NormMap,
+  cache: NormMap,
   patch: {
     readonly id: string;
     readonly fieldName: string;
@@ -298,10 +296,7 @@ function entityAndFieldExists(
   );
 }
 
-function entityExists(
-  cache: GraphQLEntityCache.NormMap,
-  patch: { readonly id: string }
-): boolean {
+function entityExists(cache: NormMap, patch: { readonly id: string }): boolean {
   return !!cache[patch.id];
 }
 

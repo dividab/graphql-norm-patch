@@ -12,14 +12,12 @@ interface MutableEntityCache {
   [id: string]: NormObj;
 }
 
-export function apply(
-  patches: ReadonlyArray<CachePatch.CachePatch>,
-  cache: NormMap,
-  staleMap: StaleMap
-): [NormMap, StaleMap] {
-  if (patches.length === 0) {
-    return [cache, staleMap];
-  }
+export function split(
+  patches: ReadonlyArray<CachePatch.CachePatch>
+): [
+  ReadonlyArray<CachePatch.ChangePatch>,
+  ReadonlyArray<CachePatch.InvalidationPatch>
+] {
   const changePatches: Array<CachePatch.ChangePatch> = [];
   const invalidationPatches: Array<CachePatch.InvalidationPatch> = [];
   for (const patch of patches) {
@@ -42,6 +40,18 @@ export function apply(
         exhaustiveCheck(patch);
     }
   }
+  return [changePatches, invalidationPatches];
+}
+
+export function apply(
+  patches: ReadonlyArray<CachePatch.CachePatch>,
+  cache: NormMap,
+  staleMap: StaleMap
+): [NormMap, StaleMap] {
+  if (patches.length === 0) {
+    return [cache, staleMap];
+  }
+  const [changePatches, invalidationPatches] = split(patches);
   const newCache = applyChanges(changePatches, cache);
   const newStale = applyInvalidations(invalidationPatches, newCache, staleMap);
   return [newCache, newStale];

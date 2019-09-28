@@ -1,12 +1,13 @@
-import { EntityCache, StaleEntities } from "graphql-norm";
+import { NormMap } from "graphql-norm";
+import { StaleMap } from "graphql-norm-stale";
 import { CachePatch } from "../../src";
 
 export interface OneTest {
   readonly name: string;
   readonly only?: true;
   readonly patches: ReadonlyArray<CachePatch>;
-  readonly cacheBefore: EntityCache;
-  readonly cacheAfter: EntityCache;
-  readonly staleBefore?: StaleEntities;
-  readonly staleAfter?: StaleEntities;
+  readonly cacheBefore: NormMap;
+  readonly cacheAfter: NormMap;
+  readonly staleBefore?: StaleMap;
+  readonly staleAfter?: StaleMap;
 }

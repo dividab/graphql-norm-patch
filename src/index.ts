@@ -1,2 +1,2 @@
 export * from "./cache-patch";
-export { apply } from "./apply";
+export { apply, applyChanges, applyInvalidations } from "./apply";

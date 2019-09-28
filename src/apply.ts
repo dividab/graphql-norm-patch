@@ -12,28 +12,62 @@ interface MutableEntityCache {
   [id: string]: NormObj;
 }
 
+export function split(
+  patches: ReadonlyArray<CachePatch.CachePatch>
+): [
+  ReadonlyArray<CachePatch.ChangePatch>,
+  ReadonlyArray<CachePatch.InvalidationPatch>
+] {
+  const changePatches: Array<CachePatch.ChangePatch> = [];
+  const invalidationPatches: Array<CachePatch.InvalidationPatch> = [];
+  for (const patch of patches) {
+    switch (patch.type) {
+      case "InvalidateEntity":
+      case "InvalidateField":
+        invalidationPatches.push(patch);
+        break;
+      case "CreateEntity":
+      case "DeleteEntity":
+      case "InsertElement":
+      case "RemoveElement":
+      case "RemoveEntityElement":
+      case "UpdateEntity":
+      case "UpdateField":
+        changePatches.push(patch);
+        break;
+      default:
+        const exhaustiveCheck = (x: never) => x;
+        exhaustiveCheck(patch);
+    }
+  }
+  return [changePatches, invalidationPatches];
+}
+
 export function apply(
   patches: ReadonlyArray<CachePatch.CachePatch>,
   cache: NormMap,
-  staleEntities: StaleMap
+  staleMap: StaleMap
 ): [NormMap, StaleMap] {
   if (patches.length === 0) {
-    return [cache, staleEntities];
+    return [cache, staleMap];
+  }
+  const [changePatches, invalidationPatches] = split(patches);
+  const newCache = applyChanges(changePatches, cache);
+  const newStale = applyInvalidations(invalidationPatches, newCache, staleMap);
+  return [newCache, newStale];
+}
+
+export function applyChanges(
+  patches: ReadonlyArray<CachePatch.ChangePatch>,
+  cache: NormMap
+): NormMap {
+  if (patches.length === 0) {
+    return cache;
   }
   // Make a shallow copy of the cache
   let cacheCopy: MutableEntityCache = { ...cache };
-  // Make a shallow copy of the stale entities
-  let staleEntitiesCopy: MutableStaleEntities = { ...staleEntities };
   for (const patch of patches) {
     switch (patch.type) {
-      case "InvalidateEntity": {
-        applyInvalidateEntity(patch, cacheCopy, staleEntitiesCopy);
-        break;
-      }
-      case "InvalidateField": {
-        applyInvalidateField(patch, cacheCopy, staleEntitiesCopy);
-        break;
-      }
       case "CreateEntity": {
         applyCreateEntity(patch, cacheCopy);
         break;
@@ -69,7 +103,37 @@ export function apply(
     }
   }
 
-  return [cacheCopy, staleEntitiesCopy];
+  return cacheCopy;
+}
+
+export function applyInvalidations(
+  patches: ReadonlyArray<CachePatch.InvalidationPatch>,
+  cache: NormMap,
+  staleMap: StaleMap
+): StaleMap {
+  if (patches.length === 0) {
+    return staleMap;
+  }
+  // Make a shallow copy of the stale entities
+  let staleEntitiesCopy: MutableStaleEntities = { ...staleMap };
+  for (const patch of patches) {
+    switch (patch.type) {
+      case "InvalidateEntity": {
+        applyInvalidateEntity(patch, cache, staleEntitiesCopy);
+        break;
+      }
+      case "InvalidateField": {
+        applyInvalidateField(patch, cache, staleEntitiesCopy);
+        break;
+      }
+      default: {
+        const exhaustiveCheck = (x: never) => x;
+        exhaustiveCheck(patch);
+      }
+    }
+  }
+
+  return staleEntitiesCopy;
 }
 
 function applyInvalidateEntity(
@@ -123,7 +187,7 @@ function applyInvalidateField(
   }
 }
 
-export declare type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 
 function invalidateRecursive(
   cache: NormMap,

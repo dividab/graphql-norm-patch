@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Upgrade `graphql-norm` package and switch to jest for testing. See PR [#12](https://github.com/dividab/graphql-norm-patch/pull/12).
 
+### Added
+
+- Separate patches for invalidation into its own union type and add functions `applyChanges`, `applyInvalidations`. See PR [#13](https://github.com/dividab/graphql-norm-patch/pull/13).
+
 ## [v0.14.0] - 2019-07-06
 
 ### Changed

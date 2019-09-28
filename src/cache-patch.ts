@@ -1,9 +1,9 @@
 import * as GraphQLCache from "graphql-norm";
 
-// A definition of an operation that modifies an entity
-export type CachePatch =
-  | InvalidateEntity
-  | InvalidateField
+export type CachePatch = ChangePatch | InvalidationPatch;
+
+// A definition of an operation that modifies fields in the cache
+export type ChangePatch =
   | CreateEntity
   | DeleteEntity
   | UpdateEntity
@@ -11,6 +11,9 @@ export type CachePatch =
   | InsertElement
   | RemoveElement
   | RemoveEntityElement;
+
+// A definition of an operation that invalidates fields in the cache
+export type InvalidationPatch = InvalidateEntity | InvalidateField;
 
 export interface InvalidateEntity {
   readonly type: "InvalidateEntity";

@@ -1440,17 +1440,12 @@ graceful-fs@^4.1.15:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.2.tgz#6f0952605d0140c1cfdb138ed005775b92d67b02"
   integrity sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
 
-graphql-norm-stale@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/graphql-norm-stale/-/graphql-norm-stale-0.1.2.tgz#f4b5b2b4a3ab432c903c7c394f502db1eca55f60"
-  integrity sha512-cAKcHOQ9b8/8Z77lIgHuWLERmwpTqhYNlYGxB24p3FCuEN3r65DNmYz9ouhqa1fQWVgOWVUrOq+7GoIFiDwpFw==
+graphql-norm-stale@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-norm-stale/-/graphql-norm-stale-0.2.0.tgz#003ce8cdf41a08fb58626eb24b8cde2078aa47cd"
+  integrity sha512-zMx6gerSWBDJxw74qoTo8rSxlguJsebP/GRN7ufbCEbIRdPkRCk/C6SX+jSXp/G62S5Fbdy7BimsykEqT0epag==
   dependencies:
-    graphql-norm "^0.12.1"
-
-graphql-norm@^0.12.1:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/graphql-norm/-/graphql-norm-0.12.2.tgz#6b0b4fe30c3b6b46f6b42e569be18683551b814e"
-  integrity sha512-pBSoXYH1yxo/hKGyfkREvd5cVk3r7mkiTmBobaXOkcppDQf1YiTfKfML254YHfNDWSUtq3DNAoOu29k8j6sA4g==
+    graphql-norm "^1.1.0"
 
 graphql-norm@^1.1.0:
   version "1.1.0"

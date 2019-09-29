@@ -1,6 +1,6 @@
 {
   "name": "graphql-norm-patch",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Declarative patching of normalized GraphQL responses",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

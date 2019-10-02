@@ -16,20 +16,18 @@
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
   "dependencies": {
-    "graphql-norm": "^1.1.0",
-    "graphql-norm-stale": "^0.2.0"
+    "graphql-norm": "^1.2.0",
+    "graphql-norm-stale": "^0.3.0"
   },
   "peerDependencies": {
-    "@types/graphql": "^0.13.0 || ^14.0.0",
-    "graphql": "^0.13.0 || ^14.0.0"
+    "graphql": "^14.5.8"
   },
   "devDependencies": {
-    "@types/graphql": "^14.0.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.8",
     "@types/tape": "^4.2.32",
     "codecov": "^3.1.0",
-    "graphql": "^14.0.2",
+    "graphql": "^14.5.8",
     "husky": "^0.14.3",
     "jest": "^24.9.0",
     "lint-staged": "^7.2.2",

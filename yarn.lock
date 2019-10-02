@@ -325,10 +325,6 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/graphql@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.0.0.tgz#ecbe4d794c854a285411bea3dce83ab193397ad0"
-
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -1440,21 +1436,22 @@ graceful-fs@^4.1.15:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.2.tgz#6f0952605d0140c1cfdb138ed005775b92d67b02"
   integrity sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
 
-graphql-norm-stale@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/graphql-norm-stale/-/graphql-norm-stale-0.2.0.tgz#003ce8cdf41a08fb58626eb24b8cde2078aa47cd"
-  integrity sha512-zMx6gerSWBDJxw74qoTo8rSxlguJsebP/GRN7ufbCEbIRdPkRCk/C6SX+jSXp/G62S5Fbdy7BimsykEqT0epag==
+graphql-norm-stale@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-norm-stale/-/graphql-norm-stale-0.3.0.tgz#6b8a4b13dd5ddf8386d995bd830d3b64216883f0"
+  integrity sha512-HnwuI4CIz0r71B+S23nlaAAywLTrSLfBs7wQdHNLNX+am20r0xeriRiFymWb5VvuzdluPfxjAq/ycUFvDgFK+g==
   dependencies:
-    graphql-norm "^1.1.0"
+    graphql-norm "^1.2.0"
 
-graphql-norm@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/graphql-norm/-/graphql-norm-1.1.0.tgz#848e98881dd8b7d5aa4870613ba6b8b2383cf3bb"
-  integrity sha512-WDRpZCAMkgwrD4D2OC9XO8n9txk6CmS2yix3Ml6G8nxTdaqlGHdfMTcEHnP/MksYjqUskISy1yhXsphtzuHdHg==
+graphql-norm@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-norm/-/graphql-norm-1.2.0.tgz#637527f81952b5811e1cf9cf5f502c9d9c6b13c4"
+  integrity sha512-7RaQ2zVuMiBrFMqVwBlkeCbO9HmbN0H6dOZqZtnNTlsVBkTmtt0WCHAAt43eCJlVg7SNj5pS0mlP0PFczs5EJg==
 
-graphql@^14.0.2:
-  version "14.0.2"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.0.2.tgz#7dded337a4c3fd2d075692323384034b357f5650"
+graphql@^14.5.8:
+  version "14.5.8"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.8.tgz#504f3d3114cb9a0a3f359bbbcf38d9e5bf6a6b3c"
+  integrity sha512-MMwmi0zlVLQKLdGiMfWkgQD7dY/TUKt4L+zgJ/aR0Howebod3aNgP5JkgvAULiR2HPVZaP2VEElqtdidHweLkg==
   dependencies:
     iterall "^1.2.2"
 

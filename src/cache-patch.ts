@@ -1,4 +1,5 @@
-import * as GraphQLCache from "graphql-norm";
+import * as GraphQLNorm from "graphql-norm";
+import * as GraphQLNormStale from "graphql-norm-stale";
 
 export type CachePatch = ChangePatch | InvalidationPatch;
 
@@ -13,59 +14,52 @@ export type ChangePatch =
   | RemoveEntityElement;
 
 // A definition of an operation that invalidates fields in the cache
-export type InvalidationPatch = InvalidateEntity | InvalidateField;
+export type InvalidationPatch = GraphQLNormStale.Patch;
 
-export interface InvalidateEntity {
-  readonly type: "InvalidateEntity";
-  readonly id: string;
-  readonly recursive: boolean;
-}
-
-export interface InvalidateField {
-  readonly type: "InvalidateField";
-  readonly id: string;
-  readonly fieldName: string;
-  readonly recursive: boolean;
-  readonly fieldArguments: {} | undefined;
-}
+export {
+  invalidateEntity,
+  InvalidateEntity,
+  invalidateField,
+  InvalidateField
+} from "graphql-norm-stale";
 
 export interface CreateEntity {
   readonly type: "CreateEntity";
-  readonly id: GraphQLCache.NormKey;
-  readonly newValue: GraphQLCache.NormObj;
+  readonly id: GraphQLNorm.NormKey;
+  readonly newValue: GraphQLNorm.NormObj;
 }
 
 export interface UpdateEntity {
   readonly type: "UpdateEntity";
-  readonly id: GraphQLCache.NormKey;
-  readonly newValues: GraphQLCache.NormObj;
+  readonly id: GraphQLNorm.NormKey;
+  readonly newValues: GraphQLNorm.NormObj;
 }
 
 export interface DeleteEntity {
   readonly type: "DeleteEntity";
-  readonly id: GraphQLCache.NormKey;
+  readonly id: GraphQLNorm.NormKey;
 }
 
 export interface UpdateField {
   readonly type: "UpdateField";
   readonly id: string;
   readonly fieldName: string;
-  readonly newValue: GraphQLCache.NormFieldValue | null;
+  readonly newValue: GraphQLNorm.NormFieldValue | null;
   readonly fieldArguments: {} | undefined;
 }
 
 export interface InsertElement {
   readonly type: "InsertElement";
-  readonly id: GraphQLCache.NormKey;
+  readonly id: GraphQLNorm.NormKey;
   readonly fieldName: string;
   readonly index: number;
-  readonly newValue: GraphQLCache.NormFieldValue;
+  readonly newValue: GraphQLNorm.NormFieldValue;
   readonly fieldArguments: {} | undefined;
 }
 
 export interface RemoveElement {
   readonly type: "RemoveElement";
-  readonly id: GraphQLCache.NormKey;
+  readonly id: GraphQLNorm.NormKey;
   readonly fieldName: string;
   readonly index: number;
   readonly fieldArguments: {} | undefined;
@@ -73,49 +67,17 @@ export interface RemoveElement {
 
 export interface RemoveEntityElement {
   readonly type: "RemoveEntityElement";
-  readonly id: GraphQLCache.NormKey;
+  readonly id: GraphQLNorm.NormKey;
   readonly fieldName: string;
-  readonly entityId: GraphQLCache.NormKey;
+  readonly entityId: GraphQLNorm.NormKey;
   readonly fieldArguments: {} | undefined;
-}
-
-/**
- *  Makes an entity stale in the cache
- */
-export function invalidateEntity(
-  id: GraphQLCache.NormKey,
-  recursive: boolean
-): InvalidateEntity {
-  return {
-    type: "InvalidateEntity",
-    id,
-    recursive
-  };
-}
-
-/**
- *  Makes a field stale in the cache
- */
-export function invalidateField<T = GraphQLCache.NormObj, A extends {} = {}>(
-  id: GraphQLCache.NormKey,
-  fieldName: Extract<keyof T, string>,
-  recursive: boolean,
-  fieldArguments?: A
-): InvalidateField {
-  return {
-    type: "InvalidateField",
-    id,
-    fieldName,
-    recursive,
-    fieldArguments
-  };
 }
 
 /**
  * Create a new entity
  */
-export function createEntity<T = GraphQLCache.NormObj>(
-  id: GraphQLCache.NormKey,
+export function createEntity<T = GraphQLNorm.NormObj>(
+  id: GraphQLNorm.NormKey,
   newValue: T
 ): CreateEntity {
   // tslint:disable-next-line:no-any
@@ -125,8 +87,8 @@ export function createEntity<T = GraphQLCache.NormObj>(
 /**
  * Update multiple fields (without arguments) on an existing entity
  */
-export function updateEntity<T = GraphQLCache.NormObj>(
-  id: GraphQLCache.NormKey,
+export function updateEntity<T = GraphQLNorm.NormObj>(
+  id: GraphQLNorm.NormKey,
   newValues: Partial<T>
 ): UpdateEntity {
   // tslint:disable-next-line:no-any
@@ -136,17 +98,17 @@ export function updateEntity<T = GraphQLCache.NormObj>(
 /**
  * Deletes an existing entity
  */
-export function deleteEntity(id: GraphQLCache.NormKey): DeleteEntity {
+export function deleteEntity(id: GraphQLNorm.NormKey): DeleteEntity {
   return { type: "DeleteEntity", id };
 }
 
 /**
  * Update a single field with optional arguments
  */
-export function updateField<T = GraphQLCache.NormObj, A extends {} = {}>(
-  id: GraphQLCache.NormKey,
+export function updateField<T = GraphQLNorm.NormObj, A extends {} = {}>(
+  id: GraphQLNorm.NormKey,
   fieldName: Extract<keyof T, string>,
-  newValue: GraphQLCache.NormFieldValue | null,
+  newValue: GraphQLNorm.NormFieldValue | null,
   fieldArguments?: A
 ): UpdateField {
   return { type: "UpdateField", id, fieldName, newValue, fieldArguments };
@@ -155,11 +117,11 @@ export function updateField<T = GraphQLCache.NormObj, A extends {} = {}>(
 /**
  * Inserts an element into an array-field in an entity
  */
-export function insertElement<T = GraphQLCache.NormObj, A extends {} = {}>(
-  id: GraphQLCache.NormKey,
+export function insertElement<T = GraphQLNorm.NormObj, A extends {} = {}>(
+  id: GraphQLNorm.NormKey,
   fieldName: Extract<keyof T, string>,
   index: number,
-  newValue: GraphQLCache.NormFieldValue | null,
+  newValue: GraphQLNorm.NormFieldValue | null,
   fieldArguments?: A
 ): InsertElement {
   return {
@@ -175,8 +137,8 @@ export function insertElement<T = GraphQLCache.NormObj, A extends {} = {}>(
 /**
  * Remove an element from an array-field in an entity
  */
-export function removeElement<T = GraphQLCache.NormObj, A extends {} = {}>(
-  id: GraphQLCache.NormKey,
+export function removeElement<T = GraphQLNorm.NormObj, A extends {} = {}>(
+  id: GraphQLNorm.NormKey,
   fieldName: Extract<keyof T, string>,
   index: number,
   fieldArguments?: A
@@ -187,13 +149,10 @@ export function removeElement<T = GraphQLCache.NormObj, A extends {} = {}>(
 /**
  * Remove all occurances of elements with specified ID from an array-field in an entity
  */
-export function removeEntityElement<
-  T = GraphQLCache.NormObj,
-  A extends {} = {}
->(
-  id: GraphQLCache.NormKey,
+export function removeEntityElement<T = GraphQLNorm.NormObj, A extends {} = {}>(
+  id: GraphQLNorm.NormKey,
   fieldName: Extract<keyof T, string>,
-  entityId: GraphQLCache.NormKey,
+  entityId: GraphQLNorm.NormKey,
   fieldArguments?: A
 ): RemoveEntityElement {
   return {

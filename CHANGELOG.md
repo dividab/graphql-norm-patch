@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/dividab/graphql-norm-patch/compare/v0.18.0...master)
 
+### Changed
+
+- Internal change to use staleness/invalidation patches from graphql-norm-stale 0.5.0.
+
 ## [v0.18.0](https://github.com/dividab/graphql-norm-patch/compare/v0.17.0...v0.18.0) - 2019-10-13
 
 ### Changed

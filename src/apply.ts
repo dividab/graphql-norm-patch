@@ -1,63 +1,13 @@
-import * as CachePatch from "./cache-patch";
-import { NormObj, NormMap, NormKey, FieldsMap } from "graphql-norm";
-import * as GraphQLNormStale from "graphql-norm-stale";
+import * as Patch from "./patch";
+import { NormObj, NormMap, NormKey } from "graphql-norm";
 
 interface MutableEntityCache {
   // tslint:disable-next-line:readonly-keyword
   [id: string]: NormObj;
 }
 
-export function split(
-  patches: ReadonlyArray<CachePatch.CachePatch>
-): [
-  ReadonlyArray<CachePatch.ChangePatch>,
-  ReadonlyArray<CachePatch.InvalidationPatch>
-] {
-  const changePatches: Array<CachePatch.ChangePatch> = [];
-  const invalidationPatches: Array<CachePatch.InvalidationPatch> = [];
-  for (const patch of patches) {
-    switch (patch.type) {
-      case "InvalidateEntity":
-      case "InvalidateField":
-        invalidationPatches.push(patch);
-        break;
-      case "CreateEntity":
-      case "DeleteEntity":
-      case "InsertElement":
-      case "RemoveElement":
-      case "RemoveEntityElement":
-      case "UpdateEntity":
-      case "UpdateField":
-        changePatches.push(patch);
-        break;
-      default:
-        const exhaustiveCheck = (x: never) => x;
-        exhaustiveCheck(patch);
-    }
-  }
-  return [changePatches, invalidationPatches];
-}
-
 export function apply(
-  patches: ReadonlyArray<CachePatch.CachePatch>,
-  cache: NormMap,
-  staleMap: FieldsMap
-): [NormMap, FieldsMap] {
-  if (patches.length === 0) {
-    return [cache, staleMap];
-  }
-  const [changePatches, invalidationPatches] = split(patches);
-  const newCache = applyChanges(changePatches, cache);
-  const newStale = GraphQLNormStale.applyPatches(
-    invalidationPatches,
-    newCache,
-    staleMap
-  );
-  return [newCache, newStale];
-}
-
-export function applyChanges(
-  patches: ReadonlyArray<CachePatch.ChangePatch>,
+  patches: ReadonlyArray<Patch.Patch>,
   cache: NormMap
 ): NormMap {
   if (patches.length === 0) {
@@ -106,7 +56,7 @@ export function applyChanges(
 }
 
 function applyCreateEntity(
-  patch: CachePatch.CreateEntity,
+  patch: Patch.CreateEntity,
   cache: MutableEntityCache
 ): void {
   // Shallow mutation OK as we have a shallow copy
@@ -114,7 +64,7 @@ function applyCreateEntity(
 }
 
 function applyUpdateEntity(
-  patch: CachePatch.UpdateEntity,
+  patch: Patch.UpdateEntity,
   cache: MutableEntityCache
 ): void {
   if (entityExists(cache, patch)) {
@@ -124,7 +74,7 @@ function applyUpdateEntity(
 }
 
 function applyDeleteEntity(
-  patch: CachePatch.DeleteEntity,
+  patch: Patch.DeleteEntity,
   cache: MutableEntityCache
 ): void {
   if (entityExists(cache, patch)) {
@@ -134,7 +84,7 @@ function applyDeleteEntity(
 }
 
 function applyUpdateField(
-  patch: CachePatch.UpdateField,
+  patch: Patch.UpdateField,
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {
@@ -147,7 +97,7 @@ function applyUpdateField(
 }
 
 function applyInsertElement(
-  patch: CachePatch.InsertElement,
+  patch: Patch.InsertElement,
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {
@@ -168,7 +118,7 @@ function applyInsertElement(
 }
 
 function applyRemoveElement(
-  patch: CachePatch.RemoveElement,
+  patch: Patch.RemoveElement,
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {
@@ -185,7 +135,7 @@ function applyRemoveElement(
 }
 
 function applyRemoveEntityElement(
-  patch: CachePatch.RemoveEntityElement,
+  patch: Patch.RemoveEntityElement,
   cache: MutableEntityCache
 ): void {
   if (entityAndFieldExists(cache, patch)) {

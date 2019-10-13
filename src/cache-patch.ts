@@ -14,7 +14,7 @@ export type ChangePatch =
   | RemoveEntityElement;
 
 // A definition of an operation that invalidates fields in the cache
-export type InvalidationPatch = GraphQLNormStale.Patch; //InvalidateEntity | InvalidateField;
+export type InvalidationPatch = GraphQLNormStale.Patch;
 
 export {
   invalidateEntity,
@@ -22,20 +22,6 @@ export {
   invalidateField,
   InvalidateField
 } from "graphql-norm-stale";
-
-// export interface InvalidateEntity {
-//   readonly type: "InvalidateEntity";
-//   readonly id: string;
-//   readonly recursive: boolean;
-// }
-
-// export interface InvalidateField {
-//   readonly type: "InvalidateField";
-//   readonly id: string;
-//   readonly fieldName: string;
-//   readonly recursive: boolean;
-//   readonly fieldArguments: {} | undefined;
-// }
 
 export interface CreateEntity {
   readonly type: "CreateEntity";
@@ -86,38 +72,6 @@ export interface RemoveEntityElement {
   readonly entityId: GraphQLNorm.NormKey;
   readonly fieldArguments: {} | undefined;
 }
-
-// /**
-//  *  Makes an entity stale in the cache
-//  */
-// export function invalidateEntity(
-//   id: GraphQLCache.NormKey,
-//   recursive: boolean
-// ): InvalidateEntity {
-//   return {
-//     type: "InvalidateEntity",
-//     id,
-//     recursive
-//   };
-// }
-
-// /**
-//  *  Makes a field stale in the cache
-//  */
-// export function invalidateField<T = GraphQLCache.NormObj, A extends {} = {}>(
-//   id: GraphQLCache.NormKey,
-//   fieldName: Extract<keyof T, string>,
-//   recursive: boolean,
-//   fieldArguments?: A
-// ): InvalidateField {
-//   return {
-//     type: "InvalidateField",
-//     id,
-//     fieldName,
-//     recursive,
-//     fieldArguments
-//   };
-// }
 
 /**
  * Create a new entity

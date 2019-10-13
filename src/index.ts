@@ -1,2 +1,3 @@
 export * from "./cache-patch";
-export { apply, applyChanges, applyInvalidations } from "./apply";
+export { apply, applyChanges } from "./apply";
+export { applyPatches as applyInvalidations } from "graphql-norm-stale";

@@ -1,7 +1,7 @@
 import { OneTest } from "./one-test";
 import { invalidateField } from "../../src";
-const ROOT_QUERY = { product: {} };
 
+const ROOT_QUERY = { product: {} };
 const testObj1 = { id: "obj1", name: "foo" };
 const testObj2 = { id: "obj2", names: ["foo", "bar"] };
 const testObj4 = { id: "obj4", ["names(id:1)"]: ["foo", "bar"] };
@@ -14,7 +14,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
     staleBefore: {},
-    staleAfter: { obj2: { names: true } }
+    staleAfter: { obj2: new Set(["names"]) }
   },
   {
     name: "invalidateField WithParams recursive=true",
@@ -22,7 +22,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     cacheBefore: { obj4: testObj4 },
     cacheAfter: { obj4: testObj4 },
     staleBefore: {},
-    staleAfter: { obj4: { ["names(id:1)"]: true } }
+    staleAfter: { obj4: new Set(["names(id:1)"]) }
   },
   {
     name: "invalidateField recursive=false with deep data",
@@ -41,7 +41,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     },
     staleBefore: {},
     staleAfter: {
-      myid: { prop: true }
+      myid: new Set(["prop"])
     }
   },
   {
@@ -61,10 +61,10 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     },
     staleBefore: {},
     staleAfter: {
-      myid: { prop: true },
-      "obj:1": { id: true, news: true },
-      "NewsItemType:1": { id: true, header: true },
-      "NewsItemType:2": { id: true, header: true }
+      myid: new Set(["prop"]),
+      "obj:1": new Set(["id", "news"]),
+      "NewsItemType:1": new Set(["id", "header"]),
+      "NewsItemType:2": new Set(["id", "header"])
     }
   },
   {
@@ -114,7 +114,7 @@ export const invalidateFieldTestData: ReadonlyArray<OneTest> = [
     },
     staleBefore: {},
     staleAfter: {
-      ROOT_QUERY: { 'product({"id":2})': true }
+      ROOT_QUERY: new Set(['product({"id":2})'])
     }
   }
 ];

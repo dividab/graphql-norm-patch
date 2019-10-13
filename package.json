@@ -16,8 +16,7 @@
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
   "dependencies": {
-    "graphql-norm": "^1.2.0",
-    "graphql-norm-stale": "^0.5.0"
+    "graphql-norm": "^1.2.0"
   },
   "peerDependencies": {
     "graphql": "^14.5.8"

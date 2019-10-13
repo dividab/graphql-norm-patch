@@ -60,14 +60,10 @@ export function removeEntityElement<T>(
 ): RemoveEntityElement;
 ```
 
-It also has a function to apply the patches to a cache and returns a tuple of the new cache object and stale entities map:
+It also has a function to apply the patches to a normalized map and returns the new normalized map:
 
 ```ts
-export function apply(
-  patches: ReadonlyArray<CachePatch.CachePatch>,
-  cache: GraphQLEntityCache.EntityCache,
-  staleEntities: GraphQLEntityCache.StaleEntities
-): [GraphQLEntityCache.EntityCache, GraphQLEntityCache.StaleEntities];
+export function apply(patches: ReadonlyArray<Patch>, cache: NormMap): NormMap;
 ```
 
 Here is a small example:
@@ -76,9 +72,8 @@ Here is a small example:
 import { createEntity, apply } from "graphql-norm-patch";
 
 const cache = {};
-const stale = {};
 const patch = createEntity("myid", { id: "myid", name: "foo" });
-const [patchedCache, patchedStale] = apply(testCase.patches, cache, stale);
+const patchedCache = apply(testCase.patches, cache);
 
 console.log(JSON.stringify(cache));
 /* { myid: { id: "myid", name: "foo" } } */

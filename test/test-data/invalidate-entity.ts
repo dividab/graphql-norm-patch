@@ -10,7 +10,7 @@ export const invalidateEntityTestData: ReadonlyArray<OneTest> = [
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
     staleBefore: {},
-    staleAfter: { obj2: { id: true, names: true } }
+    staleAfter: { obj2: new Set(["id", "names"]) }
   },
   {
     name: "invalidateEntity recursive=true with shallow data",
@@ -18,7 +18,7 @@ export const invalidateEntityTestData: ReadonlyArray<OneTest> = [
     cacheBefore: { obj2: testObj2 },
     cacheAfter: { obj2: testObj2 },
     staleBefore: {},
-    staleAfter: { obj2: { id: true, names: true } }
+    staleAfter: { obj2: new Set(["id", "names"]) }
   },
   {
     name: "invalidateEntity recursive=false with deep data",
@@ -36,9 +36,7 @@ export const invalidateEntityTestData: ReadonlyArray<OneTest> = [
       "NewsItemType:2": { id: 2, header: "olle2" }
     },
     staleBefore: {},
-    staleAfter: {
-      myid: { id: true, prop: true }
-    }
+    staleAfter: { myid: new Set(["id", "prop"]) }
   },
   {
     name: "invalidateEntity recursive=true with deep data",
@@ -57,10 +55,10 @@ export const invalidateEntityTestData: ReadonlyArray<OneTest> = [
     },
     staleBefore: {},
     staleAfter: {
-      myid: { id: true, prop: true },
-      "obj:1": { id: true, news: true },
-      "NewsItemType:1": { id: true, header: true },
-      "NewsItemType:2": { id: true, header: true }
+      myid: new Set(["id", "prop"]),
+      "obj:1": new Set(["id", "news"]),
+      "NewsItemType:1": new Set(["id", "header"]),
+      "NewsItemType:2": new Set(["id", "header"])
     }
   }
 ];

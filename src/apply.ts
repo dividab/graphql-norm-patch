@@ -1,11 +1,13 @@
 import * as CachePatch from "./cache-patch";
-import { NormObj, NormMap, NormFieldValue, NormKey } from "graphql-norm";
-import { StaleFields, StaleMap } from "graphql-norm-stale";
+import {
+  NormObj,
+  NormMap,
+  NormFieldValue,
+  NormKey,
+  FieldsMap
+} from "graphql-norm";
 
-interface MutableStaleEntities {
-  // tslint:disable-next-line:readonly-keyword
-  [key: string]: StaleFields | undefined;
-}
+type MutableFieldsMap = { [key: string]: Set<string> };
 
 interface MutableEntityCache {
   // tslint:disable-next-line:readonly-keyword
@@ -46,8 +48,8 @@ export function split(
 export function apply(
   patches: ReadonlyArray<CachePatch.CachePatch>,
   cache: NormMap,
-  staleMap: StaleMap
-): [NormMap, StaleMap] {
+  staleMap: FieldsMap
+): [NormMap, FieldsMap] {
   if (patches.length === 0) {
     return [cache, staleMap];
   }
@@ -109,13 +111,15 @@ export function applyChanges(
 export function applyInvalidations(
   patches: ReadonlyArray<CachePatch.InvalidationPatch>,
   cache: NormMap,
-  staleMap: StaleMap
-): StaleMap {
+  staleMap: FieldsMap
+): FieldsMap {
   if (patches.length === 0) {
     return staleMap;
   }
   // Make a shallow copy of the stale entities
-  let staleEntitiesCopy: MutableStaleEntities = { ...staleMap };
+  let staleEntitiesCopy: MutableFieldsMap = {
+    ...(staleMap as MutableFieldsMap)
+  };
   for (const patch of patches) {
     switch (patch.type) {
       case "InvalidateEntity": {
@@ -139,15 +143,17 @@ export function applyInvalidations(
 function applyInvalidateEntity(
   patch: CachePatch.InvalidateEntity,
   cache: NormMap,
-  staleEntities: MutableStaleEntities
+  staleEntities: MutableFieldsMap
 ): void {
   const entity = cache[patch.id];
   if (entity !== undefined) {
-    const newStaleEntity: Mutable<StaleFields> = {
-      ...staleEntities[patch.id]
-    };
+    // const newStaleEntity: Mutable<StaleFields> = {
+    //   ...staleEntities[patch.id]
+    // };
+    const newStaleEntity: Set<string> = new Set(staleEntities[patch.id]);
     for (const entityKey of Object.keys(entity)) {
-      newStaleEntity[entityKey] = true;
+      // newStaleEntity[entityKey] = true;
+      newStaleEntity.add(entityKey);
       if (patch.recursive) {
         invalidateRecursive(cache, staleEntities, entity[entityKey]);
       }
@@ -159,7 +165,7 @@ function applyInvalidateEntity(
 function applyInvalidateField(
   patch: CachePatch.InvalidateField,
   cache: NormMap,
-  staleEntities: MutableStaleEntities
+  staleEntities: MutableFieldsMap
 ): void {
   if (cache[patch.id] !== undefined) {
     // We want to invalidate all fields that start with the specified
@@ -175,10 +181,8 @@ function applyInvalidateField(
     }
 
     for (const fieldKey of entityFieldKeys) {
-      staleEntities[patch.id] = {
-        ...staleEntities[patch.id],
-        [fieldKey]: true
-      };
+      const existingFields = staleEntities[patch.id] || [];
+      staleEntities[patch.id] = new Set([...existingFields, fieldKey]);
       if (patch.recursive) {
         // Shallow mutation of stale entities OK as we have a shallow copy
         invalidateRecursive(cache, staleEntities, cache[patch.id][fieldKey]);
@@ -187,11 +191,9 @@ function applyInvalidateField(
   }
 }
 
-type Mutable<T> = { -readonly [P in keyof T]: T[P] };
-
 function invalidateRecursive(
   cache: NormMap,
-  staleEntities: MutableStaleEntities,
+  staleEntities: MutableFieldsMap,
   startingEntity: NormFieldValue | null
 ): void {
   if (
@@ -218,9 +220,7 @@ function invalidateRecursive(
       continue;
     }
     const entityFieldKeys = Object.keys(entity);
-    const newStaleEntity: Mutable<StaleFields> = {
-      ...staleEntities[entityId]
-    };
+    const newStaleEntity: Set<string> = new Set(staleEntities[entityId]);
 
     for (const entityFieldKey of entityFieldKeys) {
       const entityField = entity[entityFieldKey];
@@ -233,7 +233,7 @@ function invalidateRecursive(
       ) {
         stack.push(entityField);
       }
-      newStaleEntity[entityFieldKey] = true;
+      newStaleEntity.add(entityFieldKey);
     }
 
     staleEntities[entityId] = newStaleEntity;

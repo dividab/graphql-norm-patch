@@ -1,5 +1,4 @@
-import { NormMap } from "graphql-norm";
-import { StaleMap } from "graphql-norm-stale";
+import { NormMap, FieldsMap } from "graphql-norm";
 import { CachePatch } from "../../src";
 
 export interface OneTest {
@@ -8,6 +7,6 @@ export interface OneTest {
   readonly patches: ReadonlyArray<CachePatch>;
   readonly cacheBefore: NormMap;
   readonly cacheAfter: NormMap;
-  readonly staleBefore?: StaleMap;
-  readonly staleAfter?: StaleMap;
+  readonly staleBefore?: FieldsMap;
+  readonly staleAfter?: FieldsMap;
 }

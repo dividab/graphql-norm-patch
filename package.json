@@ -4,10 +4,7 @@
   "description": "Declarative patching of normalized GraphQL responses",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dividab/graphql-norm-patch.git"
-  },
+  "repository": "https://github.com/dividab/graphql-norm-patch",
   "keywords": [
     "graphql",
     "patch",
@@ -15,6 +12,14 @@
   ],
   "author": "Divid AB <info@divid.se>",
   "license": "MIT",
+  "files": [
+    "/lib",
+    "/src",
+    "package.json",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
   "dependencies": {
     "graphql-norm": "^1.2.0"
   },

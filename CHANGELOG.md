@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/dividab/graphql-norm-patch/compare/v0.20.0...master)
+## [Unreleased](https://github.com/dividab/graphql-norm-patch/compare/v0.20.1...master)
+
+## [v0.20.1](https://github.com/dividab/graphql-norm-patch/compare/v0.20.0...v0.20.1) - 2020-03-29
+
+### Added
+
+- Include typescript source from `src/` in published npm package.
 
 ## [v0.20.0](https://github.com/dividab/graphql-norm-patch/compare/v0.19.0...v0.20.0) - 2019-10-13
 
